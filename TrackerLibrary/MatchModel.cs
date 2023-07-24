@@ -9,7 +9,7 @@ namespace TrackerLibrary
     public class MatchModel
     {
         /// <summary>
-        /// Represents names of competing teams
+        /// Represents names of competing teams for the current match
         /// </summary>
         public List<MatchRegistryModel> Entries { get; set; } = new List<MatchRegistryModel>();
         
