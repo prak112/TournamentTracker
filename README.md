@@ -2,15 +2,39 @@
 **Source : [C# Application from Start to Finish, freeCodeCamp tutorial](https://youtu.be/wfWxdh-_k_4)**
 
 ## Scenario
-Stakeholder requests to build a Tournament tracker using bracket tournament system where application decides the opponents in a single-elimination style. At the end, tournament winner is identified. The tournament model is based on March Madness Seeding (Best v Worst in a division)
+- Stakeholder requests to build a Tournament tracker using bracket tournament system where application decides the opponents in a single-elimination style. At the end, tournament winner is identified. 
+- The tournament model is based on March Madness Seeding (Best v Worst in a division)
 
-<details>
+- <details>
 	<summary><b>March Madness Seeding</b></summary>
 	<a href="https://en.wikipedia.org/wiki/Bracket_(tournament)">March Madness Seeding (Best v Worst in a division)</a>
-	- Divisions are broken into pools (e.g., North, South, East, West) and within each pool teams are ranked. 
-	- The top seed plays the worst seed, the second best seed plays the 2nd worst seed within the pool, etc., until all teams play their first round. 
-	- If the pool has an odd (not divisible by 2) number of teams, there will be a "play in" game of the worst vs the 2nd worst team. Such a seeding system produces a wide variety of matches, but requires many games to determine an outcome
+	<ul>
+	<li> Divisions are broken into pools (e.g., North, South, East, West) and within each pool teams are ranked. </li>
+	<li> The top seed plays the worst seed, the second best seed plays the 2nd worst seed within the pool, etc., until all teams play their first round. </li>
+	<li> If the pool has an odd (not divisible by 2) number of teams, there will be a "play in" game of the worst vs the 2nd worst team. Such a seeding system produces a wide variety of matches, but requires many games to determine an outcome. </li>
+	</ul>
 </details>
+
+</br>
+
+------
+------
+
+## Table Of Contents
+- [PLAN](#plan)
+	- [Requirements](#requirements)
+	- [Questions](#questions)
+- [Overview](#overview)
+	- [Big Picture Design](#big-picture-design)
+	- [Key Concepts to Learn](#key-concepts-to-learn)
+- [DESIGN](#design)
+	- [Map Data Relations](#map-data-relations)
+	- [User Interface Design](#user-interface-design)
+	- [Logic Plan-Wiring Frontend and Backend](#logic-plan-wiring-frontend-and-backend)
+- [Personal Takeaways](#personal-takeaways)
+
+--------
+--------
 
 </br>
 
@@ -76,7 +100,7 @@ Stakeholder requests to build a Tournament tracker using bracket tournament syst
 
 ## DESIGN
 
-### Mapping Data
+### Map Data Relations
 - <i>ALWAYS build Pseudocode. 
 - ALWAYS okay to miss some details.</i> 
 
@@ -244,7 +268,7 @@ Stakeholder requests to build a Tournament tracker using bracket tournament syst
 
 
 ### Logic Plan - Wiring Frontend and Backend
-- <i>Evaluate <b>HOW</b> :
+- Evaluate <b>HOW</b> :
 	- Forms are interconnected
 	- Forms are navigated, back and forth
 		- For example : In **Create Tournament**, to create a new team and for that team to show up in the Teams/Players section, an Interface will be required
@@ -264,9 +288,11 @@ Stakeholder requests to build a Tournament tracker using bracket tournament syst
 		- Email notifications on submitting scores
 	- Data storage and access
 	- Trigger for updating current Match outcomes and next Match details
-</i>
 
 
+## Personal Takeaways
+- *To figure out when to choose what kind of project model in Visual Studio. For example : How did we know to chose ClassLibrary Model for this particular project ?*
+- *Solution is built from the project. Hence, name of the product to be created should be signified in the Solution name.*
 
 
 
