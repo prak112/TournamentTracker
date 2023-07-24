@@ -8,8 +8,15 @@ namespace TrackerLibrary
 {
     public class PersonModel
     {
+        /// <summary>
+        /// Represent name of team member
+        /// </summary>
         public string FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// Represent contact details OF team member
+        /// </summary>
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
     }
