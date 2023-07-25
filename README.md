@@ -203,7 +203,7 @@
 		<td>
 			<ul>
 				<i>
-				<li>CompetingTeams (<b>Team</b>)
+				<li>CompetingTeam (<b>Team</b>)
 				<li>Score (int)</li>
 				<li>ParentMatch (<b>Match</b>)</li>
 				</i>
@@ -288,6 +288,13 @@
 		- Email notifications on submitting scores
 	- Data storage and access
 	- Trigger for updating current Match outcomes and next Match details
+
+
+### SQL Database Design
+- SQL Server Developer Edition 2022 - includes all enterprise features minus production environment
+- SSMS (SQL Server Management Studio) - GUI for managing databases, tables, relationships and connections
+- ![Database Design](D:\GitHub_Projects\TournamentTracker\DatabaseDesign.png)
+
 
 
 ## Personal Takeaways
