@@ -31,6 +31,7 @@
 	- [Map Data Relations](#map-data-relations)
 	- [User Interface Design](#user-interface-design)
 	- [Logic Plan-Wiring Frontend and Backend](#logic-plan-wiring-frontend-and-backend)
+	- [SQL Database Design](#sql-database-design)
 - [Personal Takeaways](#personal-takeaways)
 
 --------
@@ -293,7 +294,7 @@
 ### SQL Database Design
 - SQL Server Developer Edition 2022 - includes all enterprise features minus production environment
 - SSMS (SQL Server Management Studio) - GUI for managing databases, tables, relationships and connections
-- ![Database Design](D:\GitHub_Projects\TournamentTracker\DatabaseDesign.png)
+- ![Database Design](DatabaseDesign.png)
 
 
 
