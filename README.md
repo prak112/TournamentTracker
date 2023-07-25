@@ -292,9 +292,14 @@
 
 
 ### SQL Database Design
-- SQL Server Developer Edition 2022 - includes all enterprise features minus production environment
-- SSMS (SQL Server Management Studio) - GUI for managing databases, tables, relationships and connections
-- ![Database Design](DatabaseDesign.png)
+- **SQL Server Developer Edition 2022** - includes all enterprise features except for a production environment
+- **SSMS (SQL Server Management Studio)** - GUI for managing databases, tables, relationships and connections
+- **Database Design built using SSMS** :
+![Database Design](DatabaseDesign.png)
+- **Stored Procedures** :
+	- Secure protocols to minimze SQL-Injection hacking attempts
+	- Used to display data from Database tables in the application through simple query results
+	- 
 
 
 
