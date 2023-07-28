@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.headerLabel = new System.Windows.Forms.Label();
-            this.emailText = new System.Windows.Forms.TextBox();
+            this.prizePercentageText = new System.Windows.Forms.TextBox();
             this.prizePercentageLabel = new System.Windows.Forms.Label();
-            this.phoneText = new System.Windows.Forms.TextBox();
+            this.prizeAmountText = new System.Windows.Forms.TextBox();
             this.prizeAmountLabel = new System.Windows.Forms.Label();
-            this.lastNameText = new System.Windows.Forms.TextBox();
+            this.positionNameText = new System.Windows.Forms.TextBox();
             this.positionNameLabel = new System.Windows.Forms.Label();
-            this.firstNameText = new System.Windows.Forms.TextBox();
+            this.positionText = new System.Windows.Forms.TextBox();
             this.positionLabel = new System.Windows.Forms.Label();
             this.orLabel = new System.Windows.Forms.Label();
             this.createPrizeButton = new System.Windows.Forms.Button();
@@ -52,12 +52,13 @@
             this.headerLabel.TabIndex = 3;
             this.headerLabel.Text = "Create Prize";
             // 
-            // emailText
+            // prizePercentageText
             // 
-            this.emailText.Location = new System.Drawing.Point(265, 280);
-            this.emailText.Name = "emailText";
-            this.emailText.Size = new System.Drawing.Size(235, 33);
-            this.emailText.TabIndex = 24;
+            this.prizePercentageText.Location = new System.Drawing.Point(265, 280);
+            this.prizePercentageText.Name = "prizePercentageText";
+            this.prizePercentageText.Size = new System.Drawing.Size(235, 33);
+            this.prizePercentageText.TabIndex = 24;
+            this.prizePercentageText.Text = "0";
             // 
             // prizePercentageLabel
             // 
@@ -70,12 +71,13 @@
             this.prizePercentageLabel.TabIndex = 23;
             this.prizePercentageLabel.Text = "Prize Percentage";
             // 
-            // phoneText
+            // prizeAmountText
             // 
-            this.phoneText.Location = new System.Drawing.Point(265, 193);
-            this.phoneText.Name = "phoneText";
-            this.phoneText.Size = new System.Drawing.Size(235, 33);
-            this.phoneText.TabIndex = 22;
+            this.prizeAmountText.Location = new System.Drawing.Point(265, 193);
+            this.prizeAmountText.Name = "prizeAmountText";
+            this.prizeAmountText.Size = new System.Drawing.Size(235, 33);
+            this.prizeAmountText.TabIndex = 22;
+            this.prizeAmountText.Text = "0";
             // 
             // prizeAmountLabel
             // 
@@ -88,12 +90,12 @@
             this.prizeAmountLabel.TabIndex = 21;
             this.prizeAmountLabel.Text = "Prize Amount";
             // 
-            // lastNameText
+            // positionNameText
             // 
-            this.lastNameText.Location = new System.Drawing.Point(265, 153);
-            this.lastNameText.Name = "lastNameText";
-            this.lastNameText.Size = new System.Drawing.Size(235, 33);
-            this.lastNameText.TabIndex = 20;
+            this.positionNameText.Location = new System.Drawing.Point(265, 153);
+            this.positionNameText.Name = "positionNameText";
+            this.positionNameText.Size = new System.Drawing.Size(235, 33);
+            this.positionNameText.TabIndex = 20;
             // 
             // positionNameLabel
             // 
@@ -106,12 +108,12 @@
             this.positionNameLabel.TabIndex = 19;
             this.positionNameLabel.Text = "Position Name";
             // 
-            // firstNameText
+            // positionText
             // 
-            this.firstNameText.Location = new System.Drawing.Point(265, 114);
-            this.firstNameText.Name = "firstNameText";
-            this.firstNameText.Size = new System.Drawing.Size(235, 33);
-            this.firstNameText.TabIndex = 18;
+            this.positionText.Location = new System.Drawing.Point(265, 114);
+            this.positionText.Name = "positionText";
+            this.positionText.Size = new System.Drawing.Size(235, 33);
+            this.positionText.TabIndex = 18;
             // 
             // positionLabel
             // 
@@ -153,6 +155,7 @@
             this.createPrizeButton.TabIndex = 26;
             this.createPrizeButton.Text = "Create Prize";
             this.createPrizeButton.UseVisualStyleBackColor = false;
+            this.createPrizeButton.Click += new System.EventHandler(this.createPrizeButton_Click);
             // 
             // CreatePrizeForm
             // 
@@ -162,17 +165,17 @@
             this.ClientSize = new System.Drawing.Size(563, 452);
             this.Controls.Add(this.createPrizeButton);
             this.Controls.Add(this.orLabel);
-            this.Controls.Add(this.emailText);
+            this.Controls.Add(this.prizePercentageText);
             this.Controls.Add(this.prizePercentageLabel);
-            this.Controls.Add(this.phoneText);
+            this.Controls.Add(this.prizeAmountText);
             this.Controls.Add(this.prizeAmountLabel);
-            this.Controls.Add(this.lastNameText);
+            this.Controls.Add(this.positionNameText);
             this.Controls.Add(this.positionNameLabel);
-            this.Controls.Add(this.firstNameText);
+            this.Controls.Add(this.positionText);
             this.Controls.Add(this.positionLabel);
             this.Controls.Add(this.headerLabel);
             this.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "CreatePrizeForm";
             this.Text = "Create Prize";
             this.ResumeLayout(false);
@@ -183,13 +186,13 @@
         #endregion
 
         private System.Windows.Forms.Label headerLabel;
-        private System.Windows.Forms.TextBox emailText;
+        private System.Windows.Forms.TextBox prizePercentageText;
         private System.Windows.Forms.Label prizePercentageLabel;
-        private System.Windows.Forms.TextBox phoneText;
+        private System.Windows.Forms.TextBox prizeAmountText;
         private System.Windows.Forms.Label prizeAmountLabel;
-        private System.Windows.Forms.TextBox lastNameText;
+        private System.Windows.Forms.TextBox positionNameText;
         private System.Windows.Forms.Label positionNameLabel;
-        private System.Windows.Forms.TextBox firstNameText;
+        private System.Windows.Forms.TextBox positionText;
         private System.Windows.Forms.Label positionLabel;
         private System.Windows.Forms.Label orLabel;
         private System.Windows.Forms.Button createPrizeButton;
