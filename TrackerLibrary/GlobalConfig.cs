@@ -11,7 +11,7 @@ namespace TrackerLibrary
         /// <summary>
         /// Store connection strings of storage units (databases, csv)
         /// </summary>
-        public static List<IDatatConnection> Connections { get; private set; } = new List<IDatatConnection>();
+        public static List<IDataConnection> Connections { get; private set; } = new List<IDataConnection>();
 
         /// <summary>
         /// To intialize all possible data source connections for data storage
