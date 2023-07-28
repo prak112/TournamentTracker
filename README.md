@@ -328,9 +328,21 @@
 
 		<code>
 
+				// Health Record
+				class HealthInfo
+				{
+					// properties
+				}
+				
+				// Interfaces for health information and expenses
 				public interface IHealthCare 
 				{
 					double GetHealthExpenses();
+				}
+				
+				public interface IHealthInfo
+				{
+					List<HealthInfo> GetHealthInfo();
 				}
 		</code>
 			<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
@@ -339,35 +351,31 @@
 		
 		<code>
 				
-				// Health Record
-				class HealthInfo
-				{
-					// properties
-				}
-
 				// Adult Healthcare
 				class AdultHealthCare : IHealthCare
 				{
-					private List<HealthInfo> healthIssues = new List<HealthInfo>();
-					
-					public double GetHealthExpenses(List<HealthInfo> healthIssues)
+					public List<HealthInfo> GetHealthInfo()
 					{
 						// code
-
-						return healthExpense;
+					}
+					
+					public double GetHealthExpenses()
+					{
+						// code
 					}
 				}
 				
 				// Pet Healthcare
 				class PetHealthCare : IHealthCare
 				{
-					private List<HealthInfo> healthIssues = new List<HealthInfo>();
-					
-					public double GetHealthExpenses(List<HealthInfo> healthIssues)
+					public List<HealthInfo> GetHealthInfo()
 					{
 						// code
-
-						return healthExpense;
+					}
+					
+					public double GetHealthExpenses()
+					{
+						// code
 					}
 				}
 		
@@ -375,7 +383,7 @@
 			<li>In the above example, since the categories differ their health expense calculation also differs. Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
 
 		</details>
-
+	- 
 
 
 
