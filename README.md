@@ -391,6 +391,10 @@
 ## Personal Takeaways
 - *To figure out when to choose what kind of project model in Visual Studio. For example : How did we know to chose ClassLibrary Model for this particular project ?*
 - *Solution is built from the project. Hence, name of the product to be created should be signified in the Solution name.*
+- *ALWAYS follow this order of project development:*
+	- *Break down project structurally*
+	- *Start with simple, Build towards complex*
+	- *PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat*
 
 
 
