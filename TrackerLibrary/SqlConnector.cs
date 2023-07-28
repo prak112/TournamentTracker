@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary
 {
-    public class SqlConnector : IDatatConnection
+    public class SqlConnector : IDataConnection
     {
         // TODO - Create database connection to save prize information 
         /// <summary>
