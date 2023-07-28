@@ -32,6 +32,8 @@
 	- [User Interface Design](#user-interface-design)
 	- [Logic Plan-Wiring Frontend and Backend](#logic-plan-wiring-frontend-and-backend)
 	- [SQL Database Design](#sql-database-design)
+- [IMPLEMENTATION](#implementation)
+	- [Wiring Prize Form to Backend](#wiring-prize-form-to-backend)
 - [Personal Takeaways](#personal-takeaways)
 
 --------
@@ -299,7 +301,82 @@
 - **Stored Procedures** :
 	- Secure protocols to minimze SQL-Injection hacking attempts
 	- Used to display data from Database tables in the application through simple query results
-	- 
+
+</br>
+
+## IMPLEMENTATION
+
+### Wiring Prize Form to Backend
+- Build Pseudocode :
+	- How to validate incoming data ?
+		- *verify if they are in the required format* 
+	- How to save the received data ? 
+		- *create methods to save data to SQL Database and Text file*
+	- How to connect to SQL Database ?
+		- *Use the connection string in a Global Static Class*
+	- Where to store the incoming data ?
+		- *SQL Database or Text file or both*
+	- How to save the received data to both data storage points ?
+		- *By using an Interface - which functions as a contract*
+		
+		<details>
+			<summary><b>What is an Interface ?</b></summary>
+			<ul>
+			<li>In simple terms, it is a calling card for structurally and functionally different classes under one umbrella</li>
+			<li>For Example: Let us consider health care costs in a family with adults, children and pets. Each category has their own issues but expenses would be paid with the same money.</li>
+			<li>Above example can be expressed in an Interface as : 
+
+		<code>
+
+				public interface IHealthCare 
+				{
+					double GetHealthExpenses();
+				}
+		</code>
+			<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
+			<li>If a Class or Struct implements the Interface <code>IHealthCare</code>, it must define the method implementation of the interface member</li>
+			<li>In our example, above it is defined as follows :</li>			
+		
+		<code>
+				
+				// Health Record
+				class HealthInfo
+				{
+					// properties
+				}
+
+				// Adult Healthcare
+				class AdultHealthCare : IHealthCare
+				{
+					private List<HealthInfo> healthIssues = new List<HealthInfo>();
+					
+					public double GetHealthExpenses(List<HealthInfo> healthIssues)
+					{
+						// code
+
+						return healthExpense;
+					}
+				}
+				
+				// Pet Healthcare
+				class PetHealthCare : IHealthCare
+				{
+					private List<HealthInfo> healthIssues = new List<HealthInfo>();
+					
+					public double GetHealthExpenses(List<HealthInfo> healthIssues)
+					{
+						// code
+
+						return healthExpense;
+					}
+				}
+		
+		</code>
+			<li>In the above example, since the categories differ their health expense calculation also differs. Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
+
+		</details>
+
+
 
 
 
