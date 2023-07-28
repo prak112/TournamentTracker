@@ -9,14 +9,19 @@ namespace TrackerUI
     internal static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// Main entry point for the application
         /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TournamentDashboardForm());
+
+            // Initialize database connections
+            TrackerLibrary.GlobalConfig.InitializeConnections(true, true);
+
+            Application.Run(new CreatePrizeForm());
+            //Application.Run(new TournamentDashboardForm());
         }
     }
 }
