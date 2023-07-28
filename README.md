@@ -352,7 +352,7 @@
 		<code>
 				
 				// Adult Healthcare
-				class AdultHealthCare : IHealthCare
+				class AdultHealthCare : IHealthCare, IHealthInfo
 				{
 					public List<HealthInfo> GetHealthInfo()
 					{
@@ -366,7 +366,7 @@
 				}
 				
 				// Pet Healthcare
-				class PetHealthCare : IHealthCare
+				class PetHealthCare : IHealthCare, IHealthInfo
 				{
 					public List<HealthInfo> GetHealthInfo()
 					{
