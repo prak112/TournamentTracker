@@ -14,27 +14,32 @@ namespace TrackerLibrary
         /// <summary>
         /// Store connection strings of storage units (databases, csv)
         /// </summary>
-        public static List<IDataConnection> Connections { get; private set; } = new List<IDataConnection>();
+        public static IDataConnection Connection { get; private set; }
 
 
         /// <summary>
-        /// To intialize all possible data source connections for data storage
+        /// To intialize all possible data source Connection for data storage
         /// </summary>
         /// <param name="database">Enable if saving to Database</param>
         /// <param name="textFiles">Enable if saving to Text File</param>
-        public static void InitializeConnections(bool database, bool textFiles)
+        public static void InitializeConnection(DatabaseType db)
         {
-            if (database)
+            switch (db)
             {
-                // TODO - Setup SqlConnector
-                SqlConnector sqlConnector = new SqlConnector();
-                Connections.Add(sqlConnector);
-            }
-            if (textFiles)
-            {
-                // TODO - Setup TextFileConnector
-                TextFileConnector textFileConnector = new TextFileConnector();
-                Connections.Add(textFileConnector);
+                case DatabaseType.SqlDb:
+                    // create SQL connection object
+                    SqlConnector sql = new SqlConnector();
+                    Connection = sql;
+                    break;
+
+                case DatabaseType.TextFile:
+                    // TODO - Setup TextFileConnector
+                    TextFileConnector text = new TextFileConnector();
+                    Connection = text;
+                    break;
+
+                default:
+                    break;
             }
         }
 
