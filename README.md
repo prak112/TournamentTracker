@@ -1,6 +1,8 @@
 # Tournament Tracker
 **Source : [C# Application from Start to Finish, freeCodeCamp tutorial](https://youtu.be/wfWxdh-_k_4)**
 
+**FYI : This is an ongoing README and Report. Will seperate at the end of the project.**
+
 ## Scenario
 - Stakeholder requests to build a Tournament tracker using bracket tournament system where application decides the opponents in a single-elimination style. At the end, tournament winner is identified. 
 - The tournament model is based on March Madness Seeding (Best v Worst in a division)
@@ -307,96 +309,143 @@
 ## IMPLEMENTATION
 
 ### Wiring Prize Form to Backend
-- Build Pseudocode :
-	- How to validate incoming data ?
-		- *verify if they are in the required format* 
-	- How to save the received data ? 
-		- *create methods to save data to SQL Database and Text file*
-	- How to connect to SQL Database ?
-		- *Use the connection string in a Global Static Class*
-	- Where to store the incoming data ?
-		- *SQL Database or Text file or both*
-	- How to save the received data to both data storage points ?
-		- *By using an Interface - which functions as a contract*
+- How to validate incoming data ?
+	- *verify if they are in the required format* 
+- How to save the received data ? 
+	- *create methods to save data to SQL Database and Text file*
+- How to connect to SQL Database ?
+	- *Use the connection string in a Global Static Class*
+- Where to store the incoming data ?
+	- *SQL Database or Text file or both*
+- How to save the received data to both data storage points ?
+	- *By using an Interface - which functions as a contract*
 		
-		<details>
-			<summary><b>What is an Interface ?</b></summary>
-			<ul>
-			<li>In simple terms, it is a calling card for structurally and functionally different classes under one umbrella</li>
-			<li>For Example: Let us consider health care costs in a family with adults, children and pets. Each category has their own issues but expenses would be paid with the same money.</li>
-			<li>Above example can be expressed in an Interface as : 
+	<details>
+		<summary><b>What is an Interface ?</b></summary>
+		<ul>
+		<li>In simple terms, it is a calling card for structurally and functionally different classes under one umbrella</li>
+		<li>For Example: Let us consider health care costs in a family with adults, children and pets. Each category has their own issues but expenses would be paid with the same money.</li>
+		<li>Above example can be expressed in an Interface as : 
 
-		<code>
+	<code>
 
-				// Health Record
-				class HealthInfo
-				{
-					// properties
-				}
+			// Health Record
+			class HealthInfo
+			{
+				// properties
+			}
 				
-				// Interfaces for health information and expenses
-				public interface IHealthCare 
-				{
-					double GetHealthExpenses();
-				}
+			// Interfaces for health information and expenses
+			public interface IHealthCare 
+			{
+				double GetHealthExpenses();
+			}
 				
-				public interface IHealthInfo
-				{
-					List<HealthInfo> GetHealthInfo();
-				}
-		</code>
-			<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
-			<li>If a Class or Struct implements the Interface <code>IHealthCare</code>, it must define the method implementation of the interface member</li>
-			<li>In our example, above it is defined as follows :</li>			
+			public interface IHealthInfo
+			{
+				List<HealthInfo> GetHealthInfo();
+			}
+	</code>
+		<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
+		<li>If a Class or Struct implements the Interface <code>IHealthCare</code>, it must define the method implementation of the interface member</li>
+		<li>In our example, above it is defined as follows :</li>			
 		
-		<code>
+	<code>
 				
-				// Adult Healthcare
-				class AdultHealthCare : IHealthCare, IHealthInfo
+			// Adult Healthcare
+			class AdultHealthCare : IHealthInfo, IHealthCare
+			{
+				public List<HealthInfo> GetHealthInfo()
 				{
-					public List<HealthInfo> GetHealthInfo()
-					{
-						// code
-					}
+					// code
+				}
 					
-					public double GetHealthExpenses()
-					{
-						// code
-					}
-				}
-				
-				// Pet Healthcare
-				class PetHealthCare : IHealthCare, IHealthInfo
+				public double GetHealthExpenses()
 				{
-					public List<HealthInfo> GetHealthInfo()
-					{
-						// code
-					}
-					
-					public double GetHealthExpenses()
-					{
-						// code
-					}
+					// code
 				}
+			}
+				
+			// Pet Healthcare
+			class PetHealthCare : IHealthInfo, IHealthCare
+			{
+				public List<HealthInfo> GetHealthInfo()
+				{
+					// code
+				}
+					
+				public double GetHealthExpenses()
+				{
+					// code
+				}
+			}
 		
-		</code>
-			<li>In the above example, since the categories differ their health expense calculation also differs. Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
+	</code>
+		<li>In the above example, since the categories differ their health expense calculation also differs.</li>
+		<li>Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
 
-		</details>
-	- 
+	</details>
 
+ 
+ ### Connecting SQL Server to Backend
+- To setup the backend connection to a database, in our case SQL Server, we need an ORM (Object-Relational Mapping) Tool.
+- Suitable ORM frameworks - *ADO.NET, Dapper, EntityFramework* 
 
+<section>
+<table>
+	<th>Feature</th>	
+	<th>ADO.NET</th>
+	<th>Dapper</th>
+	<th>Entity Framework</th>
+	<tr>
+		<td>Performance</td>
+		<td>Fast</td>
+		<td>Fast</td>
+		<td>Slower than ADO.NET and Dapper</td>
+	</tr>
+	<tr>
+		<td>Ease of use</td>
+		<td>Requires more code to write</td>
+		<td>Easy to use</td>
+		<td>Easy to use</td>
+	</tr>
+	<tr>
+		<td>Generates class model</td>
+		<td>No</td>
+		<td>No</td>
+		<td>Yes</td>
+	</tr>
+	<tr>
+		<td>Generates queries</td>
+		<td>No</td>
+		<td>No</td>
+		<td>Yes</td>
+	</tr>
+	<tr>
+		<td>Object tracking</td>
+		<td>No</td>
+		<td>No</td>
+		<td>Yes</td>
+</table>
+</section>
 
+- In the Frontend, *App.config* file needs to be configured with SQL Server Connection string
+- In the Backend, *Models* use ORM tool to perform CRUD operations to their respective tables in SQL Server Database
 
+---------------
+---------------
 ## Personal Takeaways
-- *To figure out when to choose what kind of project model in Visual Studio. For example : How did we know to chose ClassLibrary Model for this particular project ?*
-- *Solution is built from the project. Hence, name of the product to be created should be signified in the Solution name.*
+- *To figure out when to choose what kind of project model in Visual Studio. For example in this project ;* 
+	- *ClassLibrary* project model was chosen to build Backend (*Data Models & Data Access configurations*)
+	- Another project was added as StartUp project to build Frontend (*Forms*)
+- *Solution is built from the project. Hence, the final product should be signified in the Solution name.*
 - *ALWAYS follow this order of project development:*
 	- *Break down project structurally*
 	- *Start with simple, Build towards complex*
 	- *PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat*
-- *Application Development Layout, as understood from Lessons (till Lesson10-SQL Connection) so far*
+- Application Development Layout, as understood from Lessons so far (till Lesson10-SQL Connection)
   ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
+- *Post organizing files into directories, ALWAYS verify and modify namespaces*
 
 
 
