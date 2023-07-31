@@ -395,6 +395,8 @@
 	- *Break down project structurally*
 	- *Start with simple, Build towards complex*
 	- *PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat*
+- *Application Development Layout, as understood from Lessons (till Lesson10-SQL Connection) so far*
+  ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
 
 
 
