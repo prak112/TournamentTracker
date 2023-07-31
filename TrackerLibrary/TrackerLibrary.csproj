@@ -42,15 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalConfig.cs" />
-    <Compile Include="IDataConnection.cs" />
+    <Compile Include="DataAccess\IDataConnection.cs" />
     <Compile Include="Models\MatchModel.cs" />
     <Compile Include="Models\MatchRegistryModel.cs" />
     <Compile Include="Models\PersonModel.cs" />
     <Compile Include="Models\PrizeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlConnector.cs" />
+    <Compile Include="DataAccess\SqlConnector.cs" />
     <Compile Include="Models\TeamModel.cs" />
-    <Compile Include="TextFileConnector.cs" />
+    <Compile Include="DataAccess\TextFileConnector.cs" />
     <Compile Include="Models\TournamentModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
