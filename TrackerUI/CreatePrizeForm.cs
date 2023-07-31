@@ -31,10 +31,7 @@ namespace TrackerUI
                     prizePercentageText.Text);
 
                 // save model data to storage units (database, text file)
-                foreach (IDataConnection db in GlobalConfig.Connections)
-                {
-                    db.CreatePrize(model);
-                }
+                GlobalConfig.Connection.CreatePrize(model);
 
                 // clear form data
                 positionText.Text = "";
