@@ -452,7 +452,7 @@
 - Pseudo code :
 	- Load text file, 
 	- Convert text file data to List<PrizeModel>
-	- Read and check ID
+	- Read and Find max(ID)
 	- Assign ID = max+1 for new prize data
 	- Save List<PrizeModel> data
 	- Convert List<PrizeModel> to text file
@@ -481,6 +481,47 @@
 - Application Development Layout, as understood from Lessons so far (till Lesson10-SQL Connection)
   ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
 - *Post organizing files into directories, ALWAYS verify and modify namespaces*
+- [**this** modifier](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods) :
+	- A parameter in a method is preceded by the above modifier
+	- Used in Extension methods 
+	- Extension methods are in scope when explicitly imported with the respective namespaces into source code with a ```using``` directive
+		<details>
+		<summary>Example Implementation</summary>
+	
+			```csharp
+				// EXTENSION METHOD DEFINITION -
+				namespace ExtensionMethods
+				{
+					public static class MyExtension
+					{
+						public static int WordCount(this string str)
+						{
+							int count = str.Split(new char[] { ' ', '.', '?' }, StringSplitOptions.RemoveEmptyEntries).Length;
+							return count;
+						}
+					}
+				}
+		
+
+				// SOURCE CODE - 
+				// call with Instance method syntax as follows
+		
+				using ExtensionMethods;
+
+				string s = "Hello Extension Method";
+				int i = s.WordCount();
+
+		
+				// OR call with Static method syntax, by passing arguments
+		
+				string s = "Hello Extension Method";
+				int i = MyExtension.WordCount(s);
+			```
+		</details>
+
+- 
+
+
 
 
 
