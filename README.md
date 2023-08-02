@@ -488,7 +488,8 @@
 		<details>
 		<summary>Example Implementation</summary>
 	
-			```csharp
+		```csharp
+
 				// EXTENSION METHOD DEFINITION -
 				namespace ExtensionMethods
 				{
@@ -516,7 +517,7 @@
 		
 				string s = "Hello Extension Method";
 				int i = MyExtension.WordCount(s);
-			```
+		```
 		</details>
 
 - 
