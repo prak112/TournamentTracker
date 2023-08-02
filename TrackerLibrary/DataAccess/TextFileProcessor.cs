@@ -7,17 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackerLibrary.Models;
 
-namespace TrackerLibrary.DataAccess.TextFileConnector
+namespace TrackerLibrary.DataAccess.TextDataProcessors
 {
-    // load text file --V
-    // convert data to list<PrizeModel> --V
-    // read and check id,
-    // assign id = max+1 for new prize
-    // save model,
-    // convert list<PrizeModel> to text file
-
-
-
     /// <summary>
     /// Different levels of processing data from text files
     /// </summary>
@@ -39,7 +30,7 @@ namespace TrackerLibrary.DataAccess.TextFileConnector
         /// </summary>
         /// <param name="file">Full filepath</param>
         /// <returns>textfile converted to list or empty list</returns>
-        public static List<string> LoadFileToList(this string file) 
+        public static List<string> ReadFileToList(this string file) 
         {
             if (!File.Exists(file)) 
             {
@@ -49,11 +40,11 @@ namespace TrackerLibrary.DataAccess.TextFileConnector
         }
 
         /// <summary>
-        /// read and load data to list
+        /// Read and load data to Model object
         /// </summary>
-        /// <param name="textData"></param>
-        /// <returns></returns>
-        public static List<PrizeModel> LoadDataToList(this List<string> textData)
+        /// <param name="textData">text retrieved from file</param>
+        /// <returns>Model object with data, or empty Model object if no data to load</returns>
+        public static List<PrizeModel> LoadDataToModel(this List<string> textData)
         {
             List<PrizeModel> output = new List<PrizeModel>();
 
@@ -62,7 +53,7 @@ namespace TrackerLibrary.DataAccess.TextFileConnector
                 // split lines
                 string[] columns = line.Split(',');
 
-                // pack split data
+                // pack split data into Model
                 PrizeModel prizeData = new PrizeModel();                
                 prizeData.Id = int.Parse(columns[0]);
                 prizeData.Position = int.Parse(columns[1]);
@@ -74,6 +65,25 @@ namespace TrackerLibrary.DataAccess.TextFileConnector
             }
             return output;
         }
+
+        /// <summary>
+        /// Save updated PrizeModel data to text file
+        /// </summary>
+        /// <param name="models">All PrizeModel data packed</param>
+        /// <param name="fileName">File to be updated</param>
+        public static void SaveDataToPrizesFile(this List<PrizeModel> models, string fileName)
+        {
+            List<string> modelsData = new List<string>();
+
+            foreach (var model in models)
+            {
+                modelsData.Add($"{ model.Id }, { model.Position }, { model.PositionName }, { model.PrizeAmount }, { model.PrizePercentage }");
+            }
+            File.WriteAllLines(fileName.GetFilePath(), modelsData);
+        }
+
+
+
 
     }
 }
