@@ -36,6 +36,8 @@
 	- [SQL Database Design](#sql-database-design)
 - [IMPLEMENTATION](#implementation)
 	- [Wiring Prize Form to Backend](#wiring-prize-form-to-backend)
+	- [Connecting SQL Server to Backend](#connecting-sql-server-to-backend)
+	- [Data Processing To and From Text File](#data-processing-to-and-from-text-file)
 - [Personal Takeaways](#personal-takeaways)
 
 --------
@@ -385,10 +387,21 @@
 		<li>Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
 
 	</details>
-
+	</br>
  
  ### Connecting SQL Server to Backend
 - To setup the backend connection to a database, in our case SQL Server, we need an ORM (Object-Relational Mapping) Tool.
+- Why do we need an ORM tool ?
+	<details>
+		<summary><b>Managing Databases With and Without an ORM tool</b></summary>
+		<h5> WITHOUT an ORM Tool</h5>
+		<ul>
+		</ul>
+		<h5> WITH an ORM Tool</h5>
+		<ul>
+		</ul>
+	</details>
+
 - Suitable ORM frameworks - *ADO.NET, Dapper, EntityFramework* 
 
 <section>
@@ -431,6 +444,28 @@
 
 - In the Frontend, *App.config* file needs to be configured with SQL Server Connection string
 - In the Backend, *Models* use ORM tool to perform CRUD operations to their respective tables in SQL Server Database
+ 
+ </br>
+
+### Data Processing To and From Text File
+- Similar to the database having a table for every Model, a text file for every Model is ideal.
+- Pseudo code :
+	- Load text file, 
+	- Convert text file data to List<PrizeModel>
+	- Read and check ID
+	- Assign ID = max+1 for new prize data
+	- Save List<PrizeModel> data
+	- Convert List<PrizeModel> to text file
+
+- To generalize and automate this process for all the Models would be possible by an external library called, *AutoMapper*
+- *AutoMapper* is an Object-Object Mapper which could work ideally for our current Models, 
+- In the current scenario, we explicitly :
+	- convert text data to specific data types, 
+	- process the data
+	- revert them back 
+	- and finally save them as text files
+- Hence, *AutoMapper* would be an efficient tool to refine the process.
+
 
 ---------------
 ---------------
