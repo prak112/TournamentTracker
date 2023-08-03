@@ -132,13 +132,9 @@ Documents will be seperated at the end of the project.</b><p>
 </br>
 
 - *Define Object/Class structure*
-<style>
-	table, th, td {
-		border: 2px solid;
-		border-collapse: collapse;
-	}
+
 </style>
-<table align="center">
+<table align="center" style="border: 2px solid;">
 	<tr> 
 		<th>Object/Class</th>
 		<th>Property (<i>datatype</i>)</th>
