@@ -1,7 +1,9 @@
 # Tournament Tracker
 **Source : [C# Application from Start to Finish, freeCodeCamp tutorial](https://youtu.be/wfWxdh-_k_4)**
 
-**FYI : This is an ongoing README and Report. Will seperate at the end of the project.**
+<p style="color:yellow;"><b>
+FYI : This is an ongoing README and Project Report. 
+Documents will be seperated at the end of the project.</b><p>
 
 ## Scenario
 - Stakeholder requests to build a Tournament tracker using bracket tournament system where application decides the opponents in a single-elimination style. At the end, tournament winner is identified. 
@@ -312,140 +314,158 @@
 
 ### Wiring Prize Form to Backend
 - How to validate incoming data ?
-	- *verify if they are in the required format* 
+	- *Verify if they are in the required format* 
 - How to save the received data ? 
-	- *create methods to save data to SQL Database and Text file*
+	- *Create methods to save data to SQL Database and Text file*
 - How to connect to SQL Database ?
 	- *Use the connection string in a Global Static Class*
 - Where to store the incoming data ?
 	- *SQL Database or Text file or both*
 - How to save the received data to both data storage points ?
-	- *By using an Interface - which functions as a contract*
+	- *Through an Interface*
 		
-	<details>
-		<summary><b>What is an Interface ?</b></summary>
-		<ul>
-		<li>In simple terms, it is a calling card for structurally and functionally different classes under one umbrella</li>
-		<li>For Example: Let us consider health care costs in a family with adults, children and pets. Each category has their own issues but expenses would be paid with the same money.</li>
-		<li>Above example can be expressed in an Interface as : 
+		<details>
+			<summary><b>What is an Interface ?</b></summary>
+			<ul>
+			<li>In simple terms, it is a calling card for structurally and functionally different classes under one umbrella</li>
+			<li>For Example: Let us consider health care costs in a family with adults, children and pets. Each category has their own issues but expenses would be paid with the same money.</li>
+			<li>Above example can be expressed in an Interface as : </li>
+			<code>
 
-	<code>
-
-			// Health Record
-			class HealthInfo
-			{
-				// properties
-			}
-				
-			// Interfaces for health information and expenses
-			public interface IHealthCare 
-			{
-				double GetHealthExpenses();
-			}
-				
-			public interface IHealthInfo
-			{
-				List<HealthInfo> GetHealthInfo();
-			}
-	</code>
-		<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
-		<li>If a Class or Struct implements the Interface <code>IHealthCare</code>, it must define the method implementation of the interface member</li>
-		<li>In our example, above it is defined as follows :</li>			
-		
-	<code>
-				
-			// Adult Healthcare
-			class AdultHealthCare : IHealthInfo, IHealthCare
-			{
-				public List<HealthInfo> GetHealthInfo()
+				// Health Record
+				class HealthInfo
 				{
-					// code
+					// properties
 				}
+				
+				// Interfaces for health information and expenses
+				public interface IHealthCare 
+				{
+					double GetHealthExpenses();
+				}
+				
+				public interface IHealthInfo
+				{
+					List<HealthInfo> GetHealthInfo();
+				}
+		
+		</code>
+			<li>In the above Interface, an abstract method (method without implementation) is defined.</li>
+			<li>If a Class or Struct implements the Interface <code>IHealthCare</code>, it must define the method implementation of the interface member</li>
+			<li>In our example, above it is defined as follows :</li>			
+		
+		<code>
+				
+				// Adult Healthcare
+				class AdultHealthCare : IHealthInfo, IHealthCare
+				{
+					public List<HealthInfo> GetHealthInfo()
+					{
+						// code
+					}
 					
-				public double GetHealthExpenses()
-				{
-					// code
+					public double GetHealthExpenses()
+					{
+						// code
+					}
 				}
-			}
 				
-			// Pet Healthcare
-			class PetHealthCare : IHealthInfo, IHealthCare
-			{
-				public List<HealthInfo> GetHealthInfo()
+				// Pet Healthcare
+				class PetHealthCare : IHealthInfo, IHealthCare
 				{
-					// code
-				}
+					public List<HealthInfo> GetHealthInfo()
+					{
+						// code
+					}
 					
-				public double GetHealthExpenses()
-				{
-					// code
+					public double GetHealthExpenses()
+					{
+						// code
+					}
 				}
-			}
 		
-	</code>
-		<li>In the above example, since the categories differ their health expense calculation also differs.</li>
-		<li>Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
-
-	</details>
-	</br>
+		</code>
+			<li>In the above example, since the categories differ their health expense calculation also differs.</li>
+			<li>Hence, a full-abstract class/Interface supports building multiple Inheritance to better connect these categories.</li>
+		</details>
  
  ### Connecting SQL Server to Backend
 - To setup the backend connection to a database, in our case SQL Server, we need an ORM (Object-Relational Mapping) Tool.
-- Why do we need an ORM tool ?
 	<details>
-		<summary><b>Managing Databases With and Without an ORM tool</b></summary>
-		<h5> WITHOUT an ORM Tool</h5>
+		<summary><b>What is an ORM tool</b></summary>
+		<h5> WHAT is an ORM Tool ?</h5>
 		<ul>
-		</ul>
-		<h5> WITH an ORM Tool</h5>
-		<ul>
+			<li>ORM or Object-Relational Mapping is the process of handling database access and operations 
+			through <div title="Programming approach based on the concept of objects" style="color:orange;">Object-oriented paradigm</div>
+			</li>
+			<li>An ORM Tool is a library or a framework used to implement ORM functionality in an application, 
+			such as define database schema, perform CRUD operations, etc.
+			</li>
+			<li>ORM Tools help by abstracting the low-level database handling events. 
+			For ex. Dapper and Entity Framework
+			</li>			
 		</ul>
 	</details>
 
-- Suitable ORM frameworks - *ADO.NET, Dapper, EntityFramework* 
+	<details>
+		<summary>ORM Alternative</summary>
+		<ul>
+			<li> The namespace <code>System.Data.SqlClient</code> contains classes for accessing data 
+			from a SQL Servere database.
+			</li>
+			<li>Nevertheless, this makes database access handling laborious, as every low-level database interaction must be manually managed.
+			</li>
+		</ul>
+	</details>
+- Suitable ORM library/frameworks - *ADO.NET, Dapper, Entity Framework (EF Core)* 
 
 <section>
 <table>
 	<th>Feature</th>	
 	<th>ADO.NET</th>
 	<th>Dapper</th>
-	<th>Entity Framework</th>
+	<th>EF Core</th>
 	<tr>
 		<td>Performance</td>
 		<td>Fast</td>
-		<td>Fast</td>
+		<td>Faster than ADO.NET and EF Core</td>
 		<td>Slower than ADO.NET and Dapper</td>
 	</tr>
 	<tr>
-		<td>Ease of use</td>
-		<td>Requires more code to write</td>
-		<td>Easy to use</td>
-		<td>Easy to use</td>
+		<td>Database Access Handling</td>
+		<td>Manual</td>
+		<td>Semi-Automated</td>
+		<td>Automated</td>
 	</tr>
 	<tr>
-		<td>Generates class model</td>
+		<td>Generates Class model</td>
 		<td>No</td>
 		<td>No</td>
 		<td>Yes</td>
 	</tr>
 	<tr>
-		<td>Generates queries</td>
+		<td>Generates Queries</td>
 		<td>No</td>
 		<td>No</td>
 		<td>Yes</td>
 	</tr>
 	<tr>
-		<td>Object tracking</td>
+		<td>Object Tracking</td>
 		<td>No</td>
 		<td>No</td>
 		<td>Yes</td>
 </table>
 </section>
 
+- For this project, we chose *Dapper* as the ORM tool for the following reasons :
+	- <div title="Saves the effort of converting object datatypes to table specific datatypes">Basic Mapping between database tables and C# objects</div>
+	- <div title="Handles opening and closing database connections">Managing database connections</div>
+	- <div title="Unlike EF Core, Dapper allows full-control">Control over SQL Queries</div>
+	- <div title="Lightweight, fast and efficient framework">Enhanced performance</div>
+	
 - In the Frontend, *App.config* file needs to be configured with SQL Server Connection string
 - In the Backend, *Models* use ORM tool to perform CRUD operations to their respective tables in SQL Server Database
  
- </br>
 
 ### Data Processing To and From Text File
 - Similar to the database having a table for every Model, a text file for every Model is ideal.
