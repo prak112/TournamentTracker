@@ -429,7 +429,7 @@ Documents will be seperated at the end of the project.</b><p>
 		<td>Performance</td>
 		<td>Fast</td>
 		<td>Faster than ADO.NET and EF Core</td>
-		<td>Slower than ADO.NET and Dapper</td>
+		<td>Based on usage and configuration</td>
 	</tr>
 	<tr>
 		<td>Database Access Handling</td>
