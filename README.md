@@ -133,7 +133,6 @@ Documents will be seperated at the end of the project.</b><p>
 
 - *Define Object/Class structure*
 
-</style>
 <table align="center" style="border: 2px solid;">
 	<tr> 
 		<th>Object/Class</th>
