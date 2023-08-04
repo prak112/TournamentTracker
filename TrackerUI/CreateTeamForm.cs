@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
@@ -17,19 +18,47 @@ namespace TrackerUI
             InitializeComponent();
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void createMemberButton_Click(object sender, EventArgs e)
         {
+            if (ValidateForm())
+            {
+                PersonModel person = new PersonModel();
+                person.FirstName = firstNameText.Text;
+                person.LastName = lastNameText.Text;
+                person.Email = emailText.Text;
+                
 
+            }
+            else
+            {
+                MessageBox.Show("Invalid Information. Please fill all details.");
+            }
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Validation of all data fields in CreateMember section of CreateTeamForm
+        /// </summary>
+        /// <returns>Boolean value to indicate validation pass or fail</returns>
+        private bool ValidateForm()
         {
+            // TO DO - Add advanced CreateMember section data Validation, ex. email and phone
+            
+            if(firstNameText.Text.Length == 0)
+            {
+                return false;
+            }
 
-        }
+            if(lastNameText.Text.Length == 0)
+            {
+                return false;
+            }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
+            if(emailText.Text.Length == 0)
+            {
+                return false;
+            }
 
+            return true;
         }
     }
 }

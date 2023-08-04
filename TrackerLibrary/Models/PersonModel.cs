@@ -15,7 +15,7 @@ namespace TrackerLibrary.Models
         /// Represent name of team member
         /// </summary>
         public string FirstName { get; set; }
-        public string LastName { get; set; } = string.Empty;
+        public string LastName { get; set; }
         
         /// <summary>
         /// Represent contact details OF team member
