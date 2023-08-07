@@ -485,14 +485,14 @@ Documents will be seperated at the end of the project.</b><p>
 ---------------
 ---------------
 ## Personal Takeaways
-- *To figure out when to choose what kind of project model in Visual Studio. For example in this project ;* 
+- To figure out when to choose what kind of project model in Visual Studio. For example in this project : 
 	- *ClassLibrary* project model was chosen to build Backend (*Data Models & Data Access configurations*)
 	- Another project was added as StartUp project to build Frontend (*Forms*)
-- *Solution is built from the project. Hence, the final product should be signified in the Solution name.*
-- *ALWAYS follow this order of project development:*
-	- *Break down project structurally*
-	- *Start with simple, Build towards complex*
-	- *PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat*
+- Solution is built from the project. Hence, the final product should be signified in the Solution name.
+- <em>ALWAYS follow this order of project development:
+	- Break down complex tasks
+	- Start simple, build Towards complex
+	- PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat </em>
 - Application Development Layout, as understood from Lessons so far (till Lesson10-SQL Connection)
   ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
 - *Post organizing files into directories, ALWAYS verify and modify namespaces*
