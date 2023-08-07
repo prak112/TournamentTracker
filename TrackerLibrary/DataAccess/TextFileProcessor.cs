@@ -26,10 +26,10 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         }
 
         /// <summary>
-        /// Load existing file to list, if not exist create new list
+        /// Load existing file from data to List<>, if file doesn't exist creates new List<>
         /// </summary>
         /// <param name="file">Full filepath</param>
-        /// <returns>textfile converted to list or empty list</returns>
+        /// <returns>textfile converted to List or empty List</returns>
         public static List<string> ReadFileToList(this string file) 
         {
             if (!File.Exists(file)) 
@@ -39,12 +39,15 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             return File.ReadAllLines(file).ToList();
         }
 
+
+        // LOAD DATA TO MODEL OBJECT
+
         /// <summary>
-        /// Read and load data to Model object
+        /// Read textData from List, load data to Model object
         /// </summary>
         /// <param name="textData">text retrieved from file</param>
         /// <returns>Model object with data, or empty Model object if no data to load</returns>
-        public static List<PrizeModel> LoadDataToModel(this List<string> textData)
+        public static List<PrizeModel> LoadDataToPrizeModel(this List<string> textData)
         {
             List<PrizeModel> output = new List<PrizeModel>();
 
@@ -67,24 +70,73 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         }
 
         /// <summary>
-        /// Save updated PrizeModel data to text file
+        /// Read textData from List, load data to Model object
         /// </summary>
-        /// <param name="models">All PrizeModel data packed</param>
-        /// <param name="fileName">File to be updated</param>
-        public static void SaveDataToFile(this List<PrizeModel> models, string fileName)
+        /// <param name="textData">data read from file to List</param>
+        /// <returns>Model object loaded with data, empty object if no data</returns>
+        public static List<PersonModel> LoadDataToPersonModel(this List<string> textData)
         {
-            List<string> modelsData = new List<string>();
+            List<PersonModel> output = new List<PersonModel>();
 
-            foreach (var model in models)
+            foreach (string line in textData)
             {
-                modelsData.Add($"{ model.Id }, { model.Position }, { model.PositionName }, { model.PrizeAmount }, { model.PrizePercentage }");
+                // split lines
+                string[] columns = line.Split(',');
+
+                // pack split data into Model
+                PersonModel personData = new PersonModel();
+                personData.Id = int.Parse(columns[0]);
+                personData.FirstName = columns[1];
+                personData.LastName = columns[2];
+                personData.Email = columns[3];
+                personData.PhoneNumber = columns[4];
+                personData.RegistrationDate = DateTime.Parse(columns[5]);
+
+                output.Add(personData);
             }
-            File.WriteAllLines(fileName.GetFilePath(), modelsData);
+            return output;
         }
 
 
+        // SAVE DATA TO TEXT FILE
 
+        /// <summary>
+        /// Save updated PrizeModel data to text file
+        /// </summary>
+        /// <param name="models">All Prizes data packed into Model</param>
+        /// <param name="fileName">File to be updated</param>
+        public static void SaveDataToPrizeFile(this List<PrizeModel> models, string fileName)
+        {
+            // intialize List<string> to write Model data
+            List<string> modelsData = new List<string>();
 
+            // loop data of each Model, add to List<string>
+            foreach (var model in models)
+            {
+                modelsData.Add($"{ model.Id },{ model.Position },{ model.PositionName },{ model.PrizeAmount },{ model.PrizePercentage }");
+            }
+            // write data from List<string> to given fileName
+            File.WriteAllLines(fileName.GetFilePath(), modelsData);
+        }
+
+        /// <summary>
+        /// Save updated PersonModel data to text file
+        /// </summary>
+        /// <param name="models">All Persons data packed into Model</param>
+        /// <param name="fileName">File to be updated/overwritten</param>
+        public static void SaveDataToPeopleFile(this List<PersonModel> models, string fileName)
+        {
+            // intialize List<string> to write Model data
+            List<string> modelsData = new List<string>();
+
+            // loop data of each Model, add to List<string>
+            foreach (var model in models)
+            {
+                modelsData.Add($"{ model.Id },{ model.FirstName },{ model.LastName },{ model.Email },{ model.PhoneNumber },{ model.RegistrationDate }");
+            }
+            // write data from List<string> to given fileName
+            File.WriteAllLines(fileName.GetFilePath(), modelsData);
+        }
     }
 }
 
