@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TrackerLibrary;
 using TrackerLibrary.Models;
 
 namespace TrackerUI
@@ -22,16 +23,25 @@ namespace TrackerUI
         {
             if (ValidateForm())
             {
+                // assign form data to Model
                 PersonModel person = new PersonModel();
                 person.FirstName = firstNameText.Text;
                 person.LastName = lastNameText.Text;
+                person.PhoneNumber = phoneText.Text;
                 person.Email = emailText.Text;
-                
 
+                // pass it onto data storage
+                GlobalConfig.Connection.CreatePerson(person);
+                
+                // clear data in form
+                firstNameText.Text = "";
+                lastNameText.Text = "";
+                phoneText.Text = "+358";
+                emailText.Text = "";
             }
             else
             {
-                MessageBox.Show("Invalid Information. Please fill all details.");
+                MessageBox.Show("Invalid Information. Please fill required (marked with *) details.");
             }
         }
 

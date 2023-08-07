@@ -171,10 +171,9 @@
             this.emailLabel.ForeColor = System.Drawing.Color.Chocolate;
             this.emailLabel.Location = new System.Drawing.Point(17, 165);
             this.emailLabel.Name = "emailLabel";
-            this.emailLabel.Size = new System.Drawing.Size(82, 32);
+            this.emailLabel.Size = new System.Drawing.Size(92, 32);
             this.emailLabel.TabIndex = 15;
-            this.emailLabel.Text = "E-Mail";
-            this.emailLabel.Click += new System.EventHandler(this.label4_Click);
+            this.emailLabel.Text = "E-Mail*";
             // 
             // phoneText
             // 
@@ -182,7 +181,7 @@
             this.phoneText.Name = "phoneText";
             this.phoneText.Size = new System.Drawing.Size(181, 39);
             this.phoneText.TabIndex = 14;
-            this.phoneText.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.phoneText.Text = "+358";
             // 
             // phoneLabel
             // 
@@ -194,7 +193,6 @@
             this.phoneLabel.Size = new System.Drawing.Size(82, 32);
             this.phoneLabel.TabIndex = 13;
             this.phoneLabel.Text = "Phone";
-            this.phoneLabel.Click += new System.EventHandler(this.label3_Click);
             // 
             // lastNameText
             // 
@@ -210,9 +208,9 @@
             this.lastNameLabel.ForeColor = System.Drawing.Color.Chocolate;
             this.lastNameLabel.Location = new System.Drawing.Point(17, 82);
             this.lastNameLabel.Name = "lastNameLabel";
-            this.lastNameLabel.Size = new System.Drawing.Size(126, 32);
+            this.lastNameLabel.Size = new System.Drawing.Size(136, 32);
             this.lastNameLabel.TabIndex = 11;
-            this.lastNameLabel.Text = "Last Name";
+            this.lastNameLabel.Text = "Last Name*";
             // 
             // firstNameText
             // 
@@ -228,9 +226,9 @@
             this.firstNameLabel.ForeColor = System.Drawing.Color.Chocolate;
             this.firstNameLabel.Location = new System.Drawing.Point(17, 43);
             this.firstNameLabel.Name = "firstNameLabel";
-            this.firstNameLabel.Size = new System.Drawing.Size(129, 32);
+            this.firstNameLabel.Size = new System.Drawing.Size(139, 32);
             this.firstNameLabel.TabIndex = 9;
-            this.firstNameLabel.Text = "First Name";
+            this.firstNameLabel.Text = "First Name*";
             // 
             // teamMembersListBox
             // 
