@@ -29,6 +29,7 @@ namespace TrackerUI
                 person.LastName = lastNameText.Text;
                 person.PhoneNumber = phoneText.Text;
                 person.Email = emailText.Text;
+                person.RegistrationDate = DateTime.Now;
 
                 // pass it onto data storage
                 GlobalConfig.Connection.CreatePerson(person);
