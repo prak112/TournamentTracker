@@ -71,7 +71,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// </summary>
         /// <param name="models">All PrizeModel data packed</param>
         /// <param name="fileName">File to be updated</param>
-        public static void SaveDataToPrizesFile(this List<PrizeModel> models, string fileName)
+        public static void SaveDataToFile(this List<PrizeModel> models, string fileName)
         {
             List<string> modelsData = new List<string>();
 

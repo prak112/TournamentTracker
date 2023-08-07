@@ -11,6 +11,15 @@ namespace TrackerLibrary.DataAccess
     public class TextFileConnector : IDataConnection
     {
         private const string PrizeDataFile = "PrizeModels.csv";
+        private const string PeopleDataFile = "PersonModels.csv";
+
+        public PersonModel CreatePerson(PersonModel model)
+        {
+
+
+            return model;
+        }
+
 
         /// <summary>
         /// Stores prize information to text file 
@@ -34,7 +43,7 @@ namespace TrackerLibrary.DataAccess
             prizeModels.Add(model);
 
             // save Models data to Text File
-            prizeModels.SaveDataToPrizesFile(PrizeDataFile);
+            prizeModels.SaveDataToFile(PrizeDataFile);
 
             // updated Id value for reference
             return model;
