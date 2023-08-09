@@ -14,11 +14,50 @@ namespace TrackerUI
 {
     public partial class CreateTeamForm : Form
     {
+        // List of selected and available Team Members
+        private List<PersonModel> availableTeamMembers = new List<PersonModel>();
+        private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
+
         public CreateTeamForm()
         {
             InitializeComponent();
+
+            //CreateSampleData();
+
+            WireUpLists();
         }
 
+        /// <summary>
+        /// Create sample data to test functionality of team members dropdown list and list box
+        /// </summary>
+        private void CreateSampleData()
+        {
+            availableTeamMembers.Add(new PersonModel { FirstName="Pika", LastName="Pikachu"});
+            availableTeamMembers.Add(new PersonModel { FirstName = "Bulba", LastName = "Bulbasaur" });
+
+            selectedTeamMembers.Add(new PersonModel { FirstName="Charu", LastName="Charmander" });
+            selectedTeamMembers.Add(new PersonModel { FirstName="Onyx", LastName="Lachamma"});
+        }
+
+        /// <summary>
+        /// Synchronize list of available and selected team members
+        /// </summary>
+        private void WireUpLists()
+        {            
+            teamMemberDropDown.DataSource = availableTeamMembers;
+            teamMemberDropDown.DisplayMember = "FullName";
+
+            teamMembersListBox.DataSource = selectedTeamMembers;
+            teamMembersListBox.DisplayMember = "FullName";
+        }
+
+
+
+        /// <summary>
+        /// Event generated function for Create Member button in CreateTeamForm
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void createMemberButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm())
@@ -52,7 +91,7 @@ namespace TrackerUI
         /// <returns>Boolean value to indicate validation pass or fail</returns>
         private bool ValidateForm()
         {
-            // TO DO - Add advanced CreateMember section data Validation, ex. email and phone
+            // TODO - Add advanced CreateMember section data Validation, ex. email and phone
             
             if(firstNameText.Text.Length == 0)
             {
@@ -71,5 +110,7 @@ namespace TrackerUI
 
             return true;
         }
+
+
     }
 }
