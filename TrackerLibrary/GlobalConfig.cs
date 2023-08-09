@@ -33,7 +33,7 @@ namespace TrackerLibrary
                     break;
 
                 case DatabaseType.TextFile:
-                    // TODO - Setup TextFileConnector
+                    // setup text file connection
                     TextFileConnector text = new TextFileConnector();
                     Connection = text;
                     break;
