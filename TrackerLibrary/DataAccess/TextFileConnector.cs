@@ -69,5 +69,15 @@ namespace TrackerLibrary.DataAccess
             // updated model for reference
             return model;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public List<PersonModel> GetPerson_All()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,8 +12,7 @@ namespace TrackerLibrary.DataAccess
 {
     public class SqlConnector : IDataConnection
     {
-
-        // TODO - Stored Procedures for all tables
+        private const string db = "Tournaments";
 
         /// <summary>
         /// Inserts new prize information to Prizes table in Tournaments database 
@@ -23,7 +22,7 @@ namespace TrackerLibrary.DataAccess
         public PersonModel CreatePerson(PersonModel model)
         {
             // interface template to open database connection
-            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString("Tournaments")))
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
             {
                 // declare parameters with value and add as list items
                 var personData = new DynamicParameters();
@@ -56,7 +55,7 @@ namespace TrackerLibrary.DataAccess
         public PrizeModel CreatePrize(PrizeModel model)
         {
             // interface template to open database connection
-            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString("Tournaments")))
+            using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
             {
                 // declare parameters with value and add as list items
                 var prizeData = new DynamicParameters();
@@ -77,7 +76,20 @@ namespace TrackerLibrary.DataAccess
             return model;
         }
 
+        /// <summary>
+        /// Activate SELECT query stored procedure for People table
+        /// </summary>
+        /// <returns>query result with all details of members</returns>
+        public List<PersonModel> GetPerson_All()
+        {
+            List<PersonModel> output = new List<PersonModel>();
 
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
+            {
+                output = connection.Query<PersonModel>("dbo.spPeople_GetAll").AsList();
+            }
+            return output;
+        }
     }        
 
 }
