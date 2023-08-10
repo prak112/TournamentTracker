@@ -15,7 +15,7 @@ namespace TrackerUI
     public partial class CreateTeamForm : Form
     {
         // List of selected and available Team Members
-        private List<PersonModel> availableTeamMembers = new List<PersonModel>();
+        private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
 
         public CreateTeamForm()
