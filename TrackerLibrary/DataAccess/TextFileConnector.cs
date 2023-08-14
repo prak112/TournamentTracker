@@ -71,13 +71,13 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
-        /// 
+        /// Retrieve all data from PersonsData.csv
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public List<PersonModel> GetPerson_All()
         {
-            throw new NotImplementedException();
+            List<PersonModel> persons = PeopleDataFile.GetFilePath().ReadFileToList().LoadDataToPersonModel();
+            return persons;
         }
     }
 }
