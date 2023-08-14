@@ -43,14 +43,17 @@ namespace TrackerUI
         /// Synchronize list of available and selected team members
         /// </summary>
         private void WireUpLists()
-        {            
+        {
+            // TODO - Efficient way to refresh data bindings
+
+            teamMemberDropDown.DataSource = null;   // reset availableTeamMembers
             teamMemberDropDown.DataSource = availableTeamMembers;
             teamMemberDropDown.DisplayMember = "FullName";
 
+            teamMembersListBox.DataSource = null;   // reset selectedTeamMembers
             teamMembersListBox.DataSource = selectedTeamMembers;
             teamMembersListBox.DisplayMember = "FullName";
         }
-
 
 
         /// <summary>
@@ -72,7 +75,11 @@ namespace TrackerUI
 
                 // pass it onto data storage
                 GlobalConfig.Connection.CreatePerson(person);
-                
+
+                // add person to selectedTeamMembers and update lists
+                selectedTeamMembers.Add(person);
+                WireUpLists();
+
                 // clear data in form
                 firstNameText.Text = "";
                 lastNameText.Text = "";
@@ -81,9 +88,10 @@ namespace TrackerUI
             }
             else
             {
-                MessageBox.Show("Invalid Information. Please fill required (marked with *) details.");
+                MessageBox.Show("Invalid Information. Please fill required (marked with * details.");
             }
         }
+
 
         /// <summary>
         /// Validation of all data fields in CreateMember section of CreateTeamForm
@@ -91,7 +99,6 @@ namespace TrackerUI
         /// <returns>Boolean value to indicate validation pass or fail</returns>
         private bool ValidateForm()
         {
-            // TODO - Add advanced CreateMember section data Validation, ex. email and phone
             
             if(firstNameText.Text.Length == 0)
             {
@@ -112,5 +119,56 @@ namespace TrackerUI
         }
 
 
+        /// <summary>
+        /// Selected team member from dropdown is added to listbox for display
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addTeamMemberButton_Click(object sender, EventArgs e)
+        {
+            // save person selected from dropdown list as PersonModel object
+            PersonModel person = (PersonModel)teamMemberDropDown.SelectedItem;
+
+            if (person != null)
+            {
+                // update team member lists
+                availableTeamMembers.Remove(person);
+                selectedTeamMembers.Add(person);
+
+                // refresh members in teamMemberDropDown and teamMemberListBox
+                WireUpLists(); 
+            }
+        }
+
+        private void removeTeamMemberButton_Click(object sender, EventArgs e)
+        {
+            // save person selected for removal
+            PersonModel person = (PersonModel)teamMembersListBox.SelectedItem;
+
+            if (person != null)
+            {
+                // update team member lists
+                availableTeamMembers.Add(person);
+                selectedTeamMembers.Remove(person);
+
+                // refresh members in teamMemberDropDown and teamMemberListBox
+                WireUpLists(); 
+            }
+        }
+
+        
+        // 
+
+
+
+        /// <summary>
+        /// Collect team name & members to create team
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void createTeamButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
