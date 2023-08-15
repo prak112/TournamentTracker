@@ -126,7 +126,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 foreach (string personId in personIds)
                 {
                     // verify TeamMember Ids with people List
-                    teamData.TeamMembers.Add(people.Where(x => x.Id == int.Parse(personId)).First());
+                    teamData.TeamMembers.Add(people.Where(x => x.Id == int.Parse(personId)).FirstOrDefault());
                 }
                 // load packed data to Model
                 output.Add(teamData);
@@ -208,7 +208,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             string output = "";
             foreach (var person in people)      // loop to append each personId with '|'
             {
-                output += $"{person.Id}+|";
+                output += $"{person.Id}|";
             }
             output = output.Substring(0, output.Length - 1);    // un-append '|' for last item
             return output;
