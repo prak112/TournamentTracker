@@ -175,7 +175,9 @@ namespace TrackerUI
 
             GlobalConfig.Connection.CreateTeam(team);
 
-            // TODO - Create Form Reset after team created
+            // Reset form - clear Name and ListBox
+            teamNameText.Text = "";
+            teamMembersListBox.DataSource = null;
         }
     }
 }
