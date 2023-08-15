@@ -14,7 +14,7 @@ namespace TrackerUI
 {
     public partial class CreateTeamForm : Form
     {
-        // List of selected and available Team Members
+        // Initialize selectedTeamMembers and availableTeamMembers lists
         private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
 
@@ -126,7 +126,7 @@ namespace TrackerUI
         /// <param name="e"></param>
         private void addTeamMemberButton_Click(object sender, EventArgs e)
         {
-            // save person selected from dropdown list as PersonModel object
+            // cast selected item from dropdown list as PersonModel object
             PersonModel person = (PersonModel)teamMemberDropDown.SelectedItem;
 
             if (person != null)
