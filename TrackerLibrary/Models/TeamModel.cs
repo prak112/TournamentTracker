@@ -8,8 +8,10 @@ namespace TrackerLibrary.Models
 {
     public class TeamModel
     {
+        public int Id { get; set; }
+
         /// <summary>
-        /// Represents list of members in team
+        /// Represents list of member Ids in team
         /// </summary>
         public List<PersonModel> TeamMembers { get; set; } = new List<PersonModel>();
         
