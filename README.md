@@ -489,10 +489,15 @@ Documents will be seperated at the end of the project.</b><p>
 	- *ClassLibrary* project model was chosen to build Backend (*Data Models & Data Access configurations*)
 	- Another project was added as StartUp project to build Frontend (*Forms*)
 - Solution is built from the project. Hence, the final product should be signified in the Solution name.
-- <em>ALWAYS follow this order of project development:
-	- Break down complex tasks
-	- Start simple, build Towards complex
-	- PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat </em>
+<fieldset>
+<ul>
+<strong>ALWAYS follow this order of project development:</strong>
+<em><li>Break down complex tasks</li>
+	<li>Start simple, build Towards complex</li>
+	<li>PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat</li></em> 
+</ul>
+</fieldset>
+
 - Application Development Layout, as understood from Lessons so far (till Lesson10-SQL Connection)
   ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
 - *Post organizing files into directories, ALWAYS verify and modify namespaces*
