@@ -15,13 +15,13 @@ namespace TrackerLibrary.DataAccess
         private const string db = "Tournaments";
 
         /// <summary>
-        /// Inserts new prize information to Prizes table in Tournaments database 
+        /// Inserts new member information to People table 
         /// </summary>
         /// <param name="model">personal information of member</param>
         /// <returns>Id and Registration date of inserted personal information</returns>
         public PersonModel CreatePerson(PersonModel model)
         {
-            // interface template to open database connection
+            // interface template to open-close database connection
             using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
             {
                 // declare parameters with value and add as list items
@@ -48,13 +48,13 @@ namespace TrackerLibrary.DataAccess
 
 
         /// <summary>
-        /// Inserts new prize information to Prizes table in Tournaments database
+        /// Inserts new prize information to Prizes table
         /// </summary>
         /// <param name="model">prize information</param>
         /// <returns>prize information including unique identifier</returns>
         public PrizeModel CreatePrize(PrizeModel model)
-        {
-            // interface template to open database connection
+        {            
+            // interface template to open-close database connection
             using (IDbConnection conn = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
             {
                 // declare parameters with value and add as list items
@@ -77,6 +77,43 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
+        /// Insert Team information to Teams and TeamMembers tables
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public TeamModel CreateTeam(TeamModel model)
+        {
+            // interface template to open-close database connection
+            using(IDbConnection conn = new System.Data.SqlClient.SqlConnection (GlobalConfig.ConnString(db))) 
+            {
+                // declare parameters with values to be stored in Teams table
+                var teamData = new DynamicParameters();
+                teamData.Add("@Name", model.TeamName);
+                // unique identifier set by SQL Server 
+                teamData.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                // execute stored procedure
+                conn.Execute("dbo.spTeams_InsertData", teamData, commandType: CommandType.StoredProcedure);
+
+                // retrieve set id
+                model.Id = teamData.Get<int>("@id");
+
+                // loop the TeamMembers list to be stored in TeamMembers table
+                foreach (PersonModel member in model.TeamMembers)
+                {
+                    teamData = new DynamicParameters();
+                    teamData.Add("@TeamId", model.Id);
+                    teamData.Add("@PersonId", member.Id);
+                    teamData.Add("@id", 0, DbType.Int32, direction: ParameterDirection.Output);
+
+                    conn.Execute("dbo.spTeamMembers_InsertData", teamData, commandType: CommandType.StoredProcedure);
+                }
+
+            }// prevents memory leaks, i.e., connection closes after block executed
+            return model;
+        }
+
+        /// <summary>
         /// Activate SELECT query stored procedure for People table
         /// </summary>
         /// <returns>query result with all details of members</returns>
@@ -84,10 +121,11 @@ namespace TrackerLibrary.DataAccess
         {
             List<PersonModel> output = new List<PersonModel>();
 
+            // interface template to open-close database connection
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
             {
                 output = connection.Query<PersonModel>("dbo.spPeople_GetAll").AsList();
-            }
+            }// prevents memory leaks, i.e., connection closes after block executed
             return output;
         }
     }        
