@@ -490,11 +490,15 @@ Documents will be seperated at the end of the project.</b><p>
 	- Another project was added as StartUp project to build Frontend (*Forms*)
 - Solution is built from the project. Hence, the final product should be signified in the Solution name.
 <fieldset>
-<ul>
 <strong>ALWAYS follow this order of project development:</strong>
-<em><li>Break down complex tasks</li>
-	<li>Start simple, build Towards complex</li>
-	<li>PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat</li></em> 
+<ul>
+	<li>Break down logically complex tasks into smaller chunks</li>
+	<li>PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat</li>
+	<li>Start simple and Build towards complex. 
+<em>
+</br>Example: Interconnected UIs firstly require data to test the connection. 
+Hence, start with data population -> data storage -> data interaction</li>
+</em> 
 </ul>
 </fieldset>
 
