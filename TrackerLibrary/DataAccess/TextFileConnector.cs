@@ -12,6 +12,7 @@ namespace TrackerLibrary.DataAccess
     {
         private const string PrizeDataFile = "PrizesData.csv";
         private const string PeopleDataFile = "PersonsData.csv";
+        private const string TeamsDataFile = "TeamsData.csv";
 
         /// <summary>
         /// Process Team member information and store to PeopleDataFile.csv
@@ -31,10 +32,10 @@ namespace TrackerLibrary.DataAccess
             }
             model.Id = currentId;
 
-            // add record with new Id to Model
+            // add new record to Model
             personsModel.Add(model);
 
-            // save Models data to PeopleDataFile
+            // save Model data to PeopleDataFile
             personsModel.SaveDataToPeopleFile(PeopleDataFile);
 
             // updated model for reference
@@ -60,13 +61,35 @@ namespace TrackerLibrary.DataAccess
             }
             model.Id = currentId;
             
-            // add record with new Id to Model
+            // add new record to Model
             prizeModels.Add(model);
 
-            // save Models data to PrizeDataFile
+            // save Model data to PrizeDataFile
             prizeModels.SaveDataToPrizeFile(PrizeDataFile);
 
             // updated model for reference
+            return model;
+        }
+
+        public TeamModel CreateTeam(TeamModel model)
+        {
+            // read text file, convert list data to List<TeamModel>
+            List<TeamModel> teamModels  = TeamsDataFile.GetFilePath().ReadFileToList().LoadDataToTeamModel(PeopleDataFile);
+
+            // scan for max(Id), add 1, assign max(Id)+1 to next record
+            int currentId = 1;
+            if (teamModels.Count > 0)
+            {
+                currentId = teamModels.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+            }
+            model.Id= currentId;
+            
+            // add new record to Model
+            teamModels.Add(model);
+            
+            // save Model data to TeamsDataFile
+            teamModels.SaveDataToTeamsFile(TeamsDataFile);
+
             return model;
         }
 
