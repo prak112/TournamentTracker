@@ -94,13 +94,23 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
-        /// Retrieve all data from PersonsData.csv
+        /// Retrieve all people data from PersonsData.csv
         /// </summary>
         /// <returns></returns>
         public List<PersonModel> GetPerson_All()
         {
             List<PersonModel> persons = PeopleDataFile.GetFilePath().ReadFileToList().LoadDataToPersonModel();
             return persons;
+        }
+
+        /// <summary>
+        /// Retrieve all teams data from TeamsData.csv
+        /// </summary>
+        /// <returns></returns>
+        public List<TeamModel> GetTeam_All()
+        {
+            List<TeamModel> teams = TeamsDataFile.GetFilePath().ReadFileToList().LoadDataToTeamModel(PeopleDataFile);
+            return teams;
         }
     }
 }

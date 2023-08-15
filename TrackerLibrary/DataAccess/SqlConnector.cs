@@ -88,7 +88,7 @@ namespace TrackerLibrary.DataAccess
             {
                 // declare parameters with values to be stored in Teams table
                 var teamData = new DynamicParameters();
-                teamData.Add("@Name", model.TeamName);
+                teamData.Add("@TeamName", model.TeamName);
                 // unique identifier set by SQL Server 
                 teamData.Add("@id", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -114,9 +114,9 @@ namespace TrackerLibrary.DataAccess
         }
 
         /// <summary>
-        /// Activate SELECT query stored procedure for People table
+        /// Activate stored procedure to retrieve data from People table
         /// </summary>
-        /// <returns>query result with all details of members</returns>
+        /// <returns>query result with all data of Persons</returns>
         public List<PersonModel> GetPerson_All()
         {
             List<PersonModel> output = new List<PersonModel>();
@@ -126,6 +126,22 @@ namespace TrackerLibrary.DataAccess
             {
                 output = connection.Query<PersonModel>("dbo.spPeople_GetAll").AsList();
             }// prevents memory leaks, i.e., connection closes after block executed
+            return output;
+        }
+
+
+        /// <summary>
+        /// Activate stored procedure to retrieve data from Teams table
+        /// </summary>
+        /// <returns>Query result with all data of Teams</returns>        
+        public List<TeamModel> GetTeam_All()
+        {
+            List<TeamModel> output = new List<TeamModel>();
+
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
+            {
+                output = connection.Query<TeamModel>("dbo.spTeams_GetAll").AsList();
+            }
             return output;
         }
     }        
