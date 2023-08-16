@@ -129,6 +129,22 @@ namespace TrackerLibrary.DataAccess
             return output;
         }
 
+        /// <summary>
+        /// Activate stored procedure to retrieve data from Prizes table
+        /// </summary>
+        /// <returns>query result with all data of Prizes</returns>
+        public List<PrizeModel> GetPrize_All()
+        {
+            List<PrizeModel> output = new List<PrizeModel>();
+
+            // interface template to open-close database connection
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.ConnString(db)))
+            {
+                output = connection.Query<PrizeModel>("dbo.spPrizes_GetAll").AsList();
+            }
+            return output;
+        }
+
 
         /// <summary>
         /// Activate stored procedure to retrieve data from Teams table

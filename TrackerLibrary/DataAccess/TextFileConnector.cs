@@ -103,6 +103,12 @@ namespace TrackerLibrary.DataAccess
             return persons;
         }
 
+        public List<PrizeModel> GetPrize_All()
+        {
+            List<PrizeModel> prizes = PrizeDataFile.GetFilePath().ReadFileToList().LoadDataToPrizeModel();
+            return prizes;
+        }
+
         /// <summary>
         /// Retrieve all teams data from TeamsData.csv
         /// </summary>
