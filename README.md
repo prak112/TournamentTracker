@@ -495,10 +495,11 @@ Documents will be seperated at the end of the project.</b><p>
 	<li>Break down logically complex tasks into smaller chunks</li>
 	<li>PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat</li>
 	<li>Start simple and Build towards complex. 
-<em>
-</br>Example: Interconnected UIs firstly require data to test the connection. 
-Hence, start with data population -> data storage -> data interaction</li>
-</em> 
+<pre>
+For example, Interconnected UIs firstly require data to test the connection. Hence, start 
+as follows : 
+populate data -> store data -> data interaction</li>
+</pre>
 </ul>
 </fieldset>
 
