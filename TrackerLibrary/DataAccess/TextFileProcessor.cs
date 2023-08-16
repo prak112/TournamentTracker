@@ -150,7 +150,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             // loop data of each Model, add to List<string>
             foreach (var model in models)
             {
-                modelsData.Add($"{ model.Id },{ model.Position },{ model.PositionName },{ model.PrizeAmount },{ model.PrizePercentage }");
+                modelsData.Add($"{model.Id}, {model.Position}, {model.PositionName}, {model.PrizeAmount}, {model.PrizePercentage}");
             }
             // write data from List<string> to given fileName
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
@@ -169,7 +169,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             // loop data of each Model, add to List<string>
             foreach (var model in models)
             {
-                modelsData.Add($"{ model.Id },{ model.FirstName },{ model.LastName },{ model.Email },{ model.PhoneNumber },{ model.RegistrationDate }");
+                modelsData.Add($"{model.Id}, {model.FirstName}, {model.LastName}, {model.Email}, {model.PhoneNumber}, {model.RegistrationDate}");
             }
             // write data from modelsData to fileName
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
@@ -186,7 +186,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
             foreach (var model in models)
             {
-                modelsData.Add($"{ model.Id }, { model.TeamName }, {ConvertTeamMembersListToString(model.TeamMembers)}");
+                modelsData.Add($"{model.Id}, {model.TeamName}, {ConvertTeamMembersListToString(model.TeamMembers)}");
             }
             // write data from modelsData to fileName
             File.WriteAllLines (fileName.GetFilePath(), modelsData);
