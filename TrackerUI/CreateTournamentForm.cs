@@ -110,7 +110,10 @@ namespace TrackerUI
 
         private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // TODO - Start different thread or close current thread
+            // TODO - Close after createTeamButton_Click, Update tournamentPlayersListBox
+            CreateTeamForm newTeamForm = new CreateTeamForm();
+
+            newTeamForm.ShowDialog();
         }
 
 
@@ -127,6 +130,14 @@ namespace TrackerUI
             availablePrizes.Remove(prize);
 
             WireUpLists();
+        }
+
+        private void createPrizeButton_Click(object sender, EventArgs e)
+        {
+            // TODO - Close after createPrizeButton_Click, Update prizesListBox
+            CreatePrizeForm prizeForm = new CreatePrizeForm();
+
+            prizeForm.ShowDialog();
         }
     }
 }
