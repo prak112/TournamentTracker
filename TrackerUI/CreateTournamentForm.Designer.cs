@@ -222,6 +222,7 @@
             this.deletePrizeButton.TabIndex = 23;
             this.deletePrizeButton.Text = "Delete Prize";
             this.deletePrizeButton.UseVisualStyleBackColor = false;
+            this.deletePrizeButton.Click += new System.EventHandler(this.deletePrizeButton_Click);
             // 
             // rewardsLabel
             // 
@@ -243,7 +244,6 @@
             this.prizesListBox.Name = "prizesListBox";
             this.prizesListBox.Size = new System.Drawing.Size(360, 179);
             this.prizesListBox.TabIndex = 21;
-            this.prizesListBox.SelectedIndexChanged += new System.EventHandler(this.prizesListBox_SelectedIndexChanged);
             // 
             // createTournamentButton
             // 

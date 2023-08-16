@@ -15,8 +15,10 @@ namespace TrackerUI
     public partial class CreateTournamentForm : Form
     {
         // Initialize selectedTeams and availableTeams lists
-        private List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();  // retrieve all data from storage
+        private List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();  // retrieve all teams data from storage
         private List<TeamModel> selectedTeams = new List<TeamModel>();
+        private List<PrizeModel> availablePrizes = GlobalConfig.Connection.GetPrize_All(); // retrieve all prize data from storage
+        private List<PrizeModel> selectedPrizes = new List<PrizeModel>();
 
         public CreateTournamentForm()
         {
@@ -46,13 +48,20 @@ namespace TrackerUI
         /// </summary>
         private void WireUpLists()
         {
+            // selectTeamDropDown
             selectTeamDropDown.DataSource = null;
             selectTeamDropDown.DataSource = availableTeams;
             selectTeamDropDown.DisplayMember = "TeamName";
-
+            // tournamentPlayersListBox
             tournamentPlayersListBox.DataSource = null;
             tournamentPlayersListBox.DataSource = selectedTeams;
             tournamentPlayersListBox.DisplayMember = "TeamName";
+            
+            // prizesListBox
+            prizesListBox.DataSource = null;
+            prizesListBox.DataSource = availablePrizes;
+            prizesListBox.DisplayMember = "PositionName";
+
         }
 
 
@@ -99,15 +108,25 @@ namespace TrackerUI
         }
 
 
-
         private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            // TODO - Start different thread or close current thread
         }
 
-        private void prizesListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+        /// <summary>
+        /// Remove selected prize in prizesListBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void deletePrizeButton_Click(object sender, EventArgs e)
+        {
+            PrizeModel prize = prizesListBox.SelectedItem as PrizeModel;
+
+            selectedPrizes.Add(prize);
+            availablePrizes.Remove(prize);
+
+            WireUpLists();
         }
     }
 }
