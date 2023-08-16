@@ -157,10 +157,6 @@ namespace TrackerUI
         }
 
         
-        // 
-
-
-
         /// <summary>
         /// Collect team name & members to create team
         /// </summary>
