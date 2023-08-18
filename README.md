@@ -486,7 +486,8 @@ Documents will be seperated at the end of the project.</b><p>
 - In `CreateTournamentForm`  there are two different options :
 	- Call `CreatePrizeForm` to create a new prize
 	- Call `CreateTeamForm` to create a new team/player
-- An Interface class `ICreateRequestor` is defined to act as an intermediate between 							- `CreatePrizeForm` <-> `CreateTournamentForm` through `PrizeComplete` member,    
+- An Interface class `ICreateRequestor` is defined to act as an intermediate between 						
+	- `CreatePrizeForm` <-> `CreateTournamentForm` through `PrizeComplete` member,    
 	- `CreateTeamForm` <-> `CreateTournamentForm` through `TeamComplete` member
 - In `CreatePrizeForm` and `CreateTeamForm` classes, this interface is declared in the constructor as a class variable
 - In their respective class methods which signify the process completion (`createPrizeButton_Click` and `createTeamButton_Click`) the Interface Members are called and model data is forwarded to the calling class, `CreateTournamentForm`.
