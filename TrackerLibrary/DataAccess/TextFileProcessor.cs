@@ -42,6 +42,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
         // LOAD DATA TO MODEL OBJECT
 
+        #region LOAD TEXT FILE DATA TO MODEL methods
         /// <summary>
         /// Read textData from List, load data to Model object
         /// </summary>
@@ -57,7 +58,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 string[] columns = line.Split(',');
 
                 // pack split data into Model's variables
-                PrizeModel prizeData = new PrizeModel();                
+                PrizeModel prizeData = new PrizeModel();
                 prizeData.Id = int.Parse(columns[0]);
                 prizeData.Position = int.Parse(columns[1]);
                 prizeData.PositionName = columns[2];
@@ -132,11 +133,13 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 output.Add(teamData);
             }
             return output;
-        }
+        } 
+        #endregion
 
 
         // SAVE DATA TO TEXT FILE
 
+        #region SAVE MODEL DATA TO TEXT FILE methods
         /// <summary>
         /// Save updated PrizeModel data to text file
         /// </summary>
@@ -189,7 +192,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 modelsData.Add($"{model.Id}, {model.TeamName}, {ConvertTeamMembersListToString(model.TeamMembers)}");
             }
             // write data from modelsData to fileName
-            File.WriteAllLines (fileName.GetFilePath(), modelsData);
+            File.WriteAllLines(fileName.GetFilePath(), modelsData);
 
         }
         /// <summary>
@@ -203,7 +206,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             {
                 return string.Empty;
             }
-            
+
             // if people is NOT empty
             string output = "";
             foreach (var person in people)      // loop to append each personId with '|'
@@ -213,6 +216,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             output = output.Substring(0, output.Length - 1);    // un-append '|' for last item
             return output;
         }
+
+        #endregion    }
     }
-}
 
