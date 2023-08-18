@@ -482,12 +482,26 @@ Documents will be seperated at the end of the project.</b><p>
 - Hence, *AutoMapper* would be an efficient tool to refine the process.
 
 
----------------
----------------
+### Wiring Prize & Team Form to Tournament Form
+- In `CreateTournamentForm`  there are two different options :
+	- Call `CreatePrizeForm` to create a new prize
+	- Call `CreateTeamForm` to create a new team/player
+- An Interface class `ICreateRequestor` is defined to act as an intermediate between 							- `CreatePrizeForm` <-> `CreateTournamentForm` through `PrizeComplete` member,    
+	- `CreateTeamForm` <-> `CreateTournamentForm` through `TeamComplete` member
+- In `CreatePrizeForm` and `CreateTeamForm` classes, this interface is declared in the constructor as a class variable
+- In their respective class methods which signify the process completion (`createPrizeButton_Click` and `createTeamButton_Click`) the Interface Members are called and model data is forwarded to the calling class, `CreateTournamentForm`.
+- In the calling class (`CreatTournamentForm`), the Interface Members(`PrizeComplete` and `TeamComplete`) are implemented
+	- ListBox display list (`availablePrizes`) and Dropdown teams list (`availableTeams`) are updated.
+
+</br>
+
+<hr>
+<hr>
+
 ## Personal Takeaways
 - To figure out when to choose what kind of project model in Visual Studio. For example in this project : 
-	- *ClassLibrary* project model was chosen to build Backend (*Data Models & Data Access configurations*)
-	- Another project was added as StartUp project to build Frontend (*Forms*)
+	- `ClassLibrary` project model was chosen to build Backend (*Data Models & Data Access configurations*)
+	- `WindowsForms` project was added as StartUp project to build Frontend (*Forms*)
 - Solution is built from the project. Hence, the final product should be signified in the Solution name.
 <fieldset>
 <strong>ALWAYS follow this order of project development:</strong>
@@ -496,8 +510,8 @@ Documents will be seperated at the end of the project.</b><p>
 	<li>PLAN -> DESIGN -> Test IMPLEMENTATION -> DEBUG -> Repeat</li>
 	<li>Start simple and Build towards complex. 
 <pre>
-For example, Interconnected UIs firstly require data to test the connection. Hence, start 
-as follows : 
+For example, Interconnected UIs require data to test the connection. 
+Hence, start as follows : 
 populate data -> store data -> data interaction</li>
 </pre>
 </ul>
