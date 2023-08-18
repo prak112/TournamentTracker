@@ -12,13 +12,12 @@ using TrackerLibrary.Models;
 
 namespace TrackerUI
 {
-    public partial class CreateTournamentForm : Form
+    public partial class CreateTournamentForm : Form, ICreateRequestor
     {
         // Initialize selectedTeams and availableTeams lists
         private List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();  // retrieve all teams data from storage
         private List<TeamModel> selectedTeams = new List<TeamModel>();
         private List<PrizeModel> availablePrizes = GlobalConfig.Connection.GetPrize_All(); // retrieve all prize data from storage
-        private List<PrizeModel> selectedPrizes = new List<PrizeModel>();
 
         public CreateTournamentForm()
         {
@@ -65,6 +64,34 @@ namespace TrackerUI
         }
 
 
+        // TOURNAMENT PLAYERS
+
+        #region  TEAMS - CRUD methods 
+        /// <summary>
+        /// Popup CreateTeamForm instance from CreateTournamentForm to create new team
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // pass the current CreateTeam Form popup instance to CreateTournament Form
+            CreateTeamForm teamForm = new CreateTeamForm(this);
+
+            teamForm.ShowDialog();
+        }
+
+        /// <summary>
+        /// Implement interface member to update tournamentPlayersListBox with new team
+        /// </summary>
+        /// <param name="model"></param>
+        public void TeamComplete(TeamModel model)
+        {
+            // add teamRequestor object to availableTeams List
+            availableTeams.Add(model);
+            // update tournamentPlayersListBox
+            WireUpLists();
+        }
+
         /// <summary>
         /// Add selected/displayed team in selectTeamDropDown to tournamentsListBox
         /// </summary>
@@ -84,7 +111,6 @@ namespace TrackerUI
                 // refresh list items
                 WireUpLists();
             }
-
         }
 
         /// <summary>
@@ -107,15 +133,36 @@ namespace TrackerUI
             }
         }
 
+        #endregion
 
-        private void createNewTeamLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+
+        // PRIZES 
+
+        #region PRIZES - CRUD methods
+        /// <summary>
+        /// Popup CreatePrizeForm instance from CreateTournamentForm to create new prize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void createPrizeButton_Click(object sender, EventArgs e)
         {
-            // TODO - Close after createTeamButton_Click, Update tournamentPlayersListBox
-            CreateTeamForm newTeamForm = new CreateTeamForm();
-
-            newTeamForm.ShowDialog();
+            // pass the current CreatePrize Form popup instance to CreateTournament Form
+            CreatePrizeForm prizeForm = new CreatePrizeForm(this);
+            // shows PrizeForm on top of TournamentForm
+            prizeForm.ShowDialog();
         }
 
+        /// <summary>
+        /// Implement Interface member to update prizesListBox with new prize
+        /// </summary>
+        /// <param name="model"></param>
+        public void PrizeComplete(PrizeModel model)
+        {
+            // add model data to selectedPrizes list
+            availablePrizes.Add(model);
+            // update prizesListBox
+            WireUpLists();
+        }
 
         /// <summary>
         /// Remove selected prize in prizesListBox
@@ -126,18 +173,10 @@ namespace TrackerUI
         {
             PrizeModel prize = prizesListBox.SelectedItem as PrizeModel;
 
-            selectedPrizes.Add(prize);
             availablePrizes.Remove(prize);
 
             WireUpLists();
-        }
-
-        private void createPrizeButton_Click(object sender, EventArgs e)
-        {
-            // TODO - Close after createPrizeButton_Click, Update prizesListBox
-            CreatePrizeForm prizeForm = new CreatePrizeForm();
-
-            prizeForm.ShowDialog();
-        }
+        } 
+        #endregion
     }
 }

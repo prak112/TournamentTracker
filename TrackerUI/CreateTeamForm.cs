@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,10 +19,15 @@ namespace TrackerUI
         private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
 
-        public CreateTeamForm()
+        ICreateRequestor teamRequestor;
+
+        public CreateTeamForm(ICreateRequestor caller)
         {
             InitializeComponent();
-
+            
+            // declare interface member  
+            this.teamRequestor = caller;
+            
             //CreateSampleData();
 
             WireUpLists();
@@ -169,11 +175,12 @@ namespace TrackerUI
             team.TeamName = teamNameText.Text;
             team.TeamMembers = selectedTeamMembers;
 
+            // save team data to storage unit
             GlobalConfig.Connection.CreateTeam(team);
+            // send team data to caller (CreateTournamentForm)
+            teamRequestor.TeamComplete(team);
 
-            // Reset form - clear Name and ListBox
-            teamNameText.Text = "";
-            teamMembersListBox.DataSource = null;
+            this.Close();
         }
     }
 }

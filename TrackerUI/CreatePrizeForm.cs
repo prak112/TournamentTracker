@@ -15,9 +15,12 @@ namespace TrackerUI
 {
     public partial class CreatePrizeForm : Form
     {
-        public CreatePrizeForm()
+        ICreateRequestor prizeRequestor;
+
+        public CreatePrizeForm(ICreateRequestor caller)
         {
             InitializeComponent();
+            prizeRequestor = caller;
         }
 
         private void createPrizeButton_Click(object sender, EventArgs e)
@@ -32,12 +35,17 @@ namespace TrackerUI
 
                 // save model data to storage units (database, text file)
                 GlobalConfig.Connection.CreatePrize(model);
+                // send prize data to caller (CreateTournamentForm)
+                prizeRequestor.PrizeComplete(model);
 
-                // clear form data
-                positionText.Text = "";
-                positionNameText.Text = "";
-                prizeAmountText.Text = "0";
-                prizePercentageText.Text = "0";
+                // close form
+                this.Close();
+
+                //// clear form data
+                //positionText.Text = "";
+                //positionNameText.Text = "";
+                //prizeAmountText.Text = "0";
+                //prizePercentageText.Text = "0";
             }
             // prompt message for invalid data or format
             else

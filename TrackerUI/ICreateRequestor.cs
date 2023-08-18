@@ -9,7 +9,7 @@ namespace TrackerUI
 {
     public interface ICreateRequestor
     {
-        void PrizeComplete (PrizeModel model);
-        void TeamComplete (TeamModel model);
+        void PrizeComplete(PrizeModel model);
+        void TeamComplete(TeamModel model);
     }
 }
