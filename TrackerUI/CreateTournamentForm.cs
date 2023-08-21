@@ -17,7 +17,7 @@ namespace TrackerUI
         // Initialize selectedTeams and availableTeams lists
         private List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();  // retrieve all teams data from storage
         private List<TeamModel> selectedTeams = new List<TeamModel>();
-        private List<PrizeModel> availablePrizes = GlobalConfig.Connection.GetPrize_All(); // retrieve all prize data from storage
+        private List<PrizeModel> selectedPrizes = GlobalConfig.Connection.GetPrize_All(); // retrieve all prize data from storage
 
         public CreateTournamentForm()
         {
@@ -58,7 +58,7 @@ namespace TrackerUI
             
             // prizesListBox
             prizesListBox.DataSource = null;
-            prizesListBox.DataSource = availablePrizes;
+            prizesListBox.DataSource = selectedPrizes;
             prizesListBox.DisplayMember = "PositionName";
 
         }
@@ -159,7 +159,7 @@ namespace TrackerUI
         public void PrizeComplete(PrizeModel model)
         {
             // add model data to selectedPrizes list
-            availablePrizes.Add(model);
+            selectedPrizes.Add(model);
             // update prizesListBox
             WireUpLists();
         }
@@ -173,10 +173,63 @@ namespace TrackerUI
         {
             PrizeModel prize = prizesListBox.SelectedItem as PrizeModel;
 
-            availablePrizes.Remove(prize);
+            selectedPrizes.Remove(prize);
 
             WireUpLists();
-        } 
+        }
         #endregion
+
+
+        /// <summary>
+        /// validate form data, save Tournament data to storage unit
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void createTournamentButton_Click(object sender, EventArgs e)
+        {
+            bool dataValid = true; 
+
+            // validate form data
+            // TournamentName
+            if (tournamentNameText.Text == string.Empty)
+            {
+                dataValid = false;
+            }
+
+            // EntryFee
+            decimal fee = 0;
+            if (!decimal.TryParse(entryFeeText.Text, out fee))
+            {
+                dataValid = false;
+            }
+
+            // save form data to model
+            if (dataValid) 
+            {
+                TournamentModel tournament = new TournamentModel();
+                tournament.TournamentName = tournamentNameText.Text;
+                tournament.EntryFee = fee;
+                tournament.Prizes = selectedPrizes;
+                tournament.Teams = selectedTeams;
+
+                // Wire MatchModels
+
+                // pass model data to sql server
+                GlobalConfig.Connection.CreateTournament(tournament);
+
+            }
+            else
+            {
+                MessageBox.Show("Please chekc and re-enter valid information for Tournament Name/Entry Fee/Prizes/Teams.",
+                    "Invalid Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+
+
+            // save name, entryfee, prizesListBox, tournamentPlayersListBox info to data storage
+            // text - Tournaments data with PrizeId, TeamId
+        }
     }
 }

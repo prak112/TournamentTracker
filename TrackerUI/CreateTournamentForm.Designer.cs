@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.headerLabel = new System.Windows.Forms.Label();
-            this.tounamentNameText = new System.Windows.Forms.TextBox();
+            this.tournamentNameText = new System.Windows.Forms.TextBox();
             this.tournamentNameLabel = new System.Windows.Forms.Label();
             this.entryFeeText = new System.Windows.Forms.TextBox();
             this.entryFeeLabel = new System.Windows.Forms.Label();
@@ -58,12 +58,12 @@
             this.headerLabel.TabIndex = 1;
             this.headerLabel.Text = "Create Tournament";
             // 
-            // tounamentNameText
+            // tournamentNameText
             // 
-            this.tounamentNameText.Location = new System.Drawing.Point(48, 177);
-            this.tounamentNameText.Name = "tounamentNameText";
-            this.tounamentNameText.Size = new System.Drawing.Size(339, 33);
-            this.tounamentNameText.TabIndex = 10;
+            this.tournamentNameText.Location = new System.Drawing.Point(48, 177);
+            this.tournamentNameText.Name = "tournamentNameText";
+            this.tournamentNameText.Size = new System.Drawing.Size(339, 33);
+            this.tournamentNameText.TabIndex = 10;
             // 
             // tournamentNameLabel
             // 
@@ -264,6 +264,7 @@
             this.createTournamentButton.TabIndex = 24;
             this.createTournamentButton.Text = "Create Tournament";
             this.createTournamentButton.UseVisualStyleBackColor = false;
+            this.createTournamentButton.Click += new System.EventHandler(this.createTournamentButton_Click);
             // 
             // CreateTournamentForm
             // 
@@ -285,7 +286,7 @@
             this.Controls.Add(this.selectTeamLabel);
             this.Controls.Add(this.entryFeeText);
             this.Controls.Add(this.entryFeeLabel);
-            this.Controls.Add(this.tounamentNameText);
+            this.Controls.Add(this.tournamentNameText);
             this.Controls.Add(this.tournamentNameLabel);
             this.Font = new System.Drawing.Font("Nirmala UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(6);
@@ -299,7 +300,7 @@
         #endregion
 
         private System.Windows.Forms.Label headerLabel;
-        private System.Windows.Forms.TextBox tounamentNameText;
+        private System.Windows.Forms.TextBox tournamentNameText;
         private System.Windows.Forms.Label tournamentNameLabel;
         private System.Windows.Forms.TextBox entryFeeText;
         private System.Windows.Forms.Label entryFeeLabel;
