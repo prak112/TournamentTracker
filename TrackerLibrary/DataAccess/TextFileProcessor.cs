@@ -20,7 +20,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// <param name="fileName">text file name like, PrizeModel.csv</param>
         /// <returns>Concatenated filepath like, D:\GitHub_Projects\TournamentTracker\data\PrizeModel.csv</returns>
         public static string GetFilePath(this string fileName)
-        {   
+        {
             string filePath = $"{ConfigurationManager.AppSettings["filepath"]}\\{fileName}";
             return filePath;
         }
@@ -30,9 +30,9 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// </summary>
         /// <param name="file">Full filepath</param>
         /// <returns>textfile converted to List or empty List</returns>
-        public static List<string> ReadFileToList(this string file) 
+        public static List<string> ReadFileToList(this string file)
         {
-            if (!File.Exists(file)) 
+            if (!File.Exists(file))
             {
                 return new List<string>();
             }
@@ -133,7 +133,54 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 output.Add(teamData);
             }
             return output;
-        } 
+        }
+
+
+        public static List<TournamentModel> LoadDataToTournamentModel
+            (this List<string> textData, string peopleFileName, string TeamsFile, string PrizesFile)
+        {
+            // data layout
+            // column Index - 0          1            2           3                   4                   5 
+            // column name - id, TournamentName, EntryFee, (Teams-Id|Id|Id), (Prizes-Id|Id|Id), (Rounds-id^id^id|id^id^id|id^id^id|)
+            List<TournamentModel> output = new List<TournamentModel>();
+            List<TeamModel> teams = TeamsFile.GetFilePath().ReadFileToList().LoadDataToTeamModel(peopleFileName);
+            List<PrizeModel> prizes = PrizesFile.GetFilePath().ReadFileToList().LoadDataToPrizeModel();
+
+            foreach (string line in textData)
+            {
+                string[] columns = line.Split(',');
+                TournamentModel tournamentData = new TournamentModel();
+
+                // Tournament data
+                tournamentData.Id = int.Parse(columns[0]);
+                tournamentData.TournamentName = columns[1];
+                tournamentData.EntryFee = decimal.Parse(columns[2]);
+
+                // Teams data
+                string[] teamIds = columns[3].Split('|');
+                foreach (string teamId in teamIds)
+                {
+                    tournamentData.Teams.Add(teams.Where(x => x.Id == int.Parse(teamId)).FirstOrDefault());
+                }
+
+                // Prizes data
+                string[] prizeIds = columns[4].Split('|');
+                foreach (string prizeId in prizeIds)
+                {
+                    tournamentData.Prizes.Add(prizes.Where(x => x.Id == int.Parse(prizeId)).FirstOrDefault());
+                }
+
+                // Rounds data
+                // TODO - Retrieve Rounds data from MatchModel
+
+
+                output.Add(tournamentData);
+            }
+
+            return output;
+        }
+
+
         #endregion
 
 
@@ -217,6 +264,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             return output;
         }
 
-        #endregion    }
+        #endregion
     }
+}
 
