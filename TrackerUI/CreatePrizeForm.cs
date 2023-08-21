@@ -41,11 +41,6 @@ namespace TrackerUI
                 // close form
                 this.Close();
 
-                //// clear form data
-                //positionText.Text = "";
-                //positionNameText.Text = "";
-                //prizeAmountText.Text = "0";
-                //prizePercentageText.Text = "0";
             }
             // prompt message for invalid data or format
             else
