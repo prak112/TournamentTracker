@@ -228,7 +228,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// <summary>
         /// Save updated TeamModel data to text file
         /// </summary>
-        /// <param name="models">All Teams data packed to Model</param>
+        /// <param name="models">All Teams data packed in Model</param>
         /// <param name="fileName">File to update or overwrite</param>
         public static void SaveDataToTeamsFile(this List<TeamModel> models, string fileName)
         {
@@ -242,10 +242,37 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
 
         }
+
         /// <summary>
-        /// Helper method to delimit TeamMembers list with '|'
+        /// Save updated TournamentModel data to TournamentsData.csv
         /// </summary>
-        /// <param name="people">TeamMembers data saved in PersonModel format</param>
+        /// <param name="models">all tournaments data packed in TournamentModel</param>
+        public static void SaveDataToTournamentsFile(this List<TournamentModel> models, string fileName)
+        {
+            List<string> modelsData = new List<string>();
+
+            // data layout
+            // column Index - 0          1            2           3                   4                   5 
+            // column name - id, TournamentName, EntryFee, (Teams-Id|Id|Id), (Prizes-Id|Id|Id), (Rounds-id^id^id|id^id^id|id^id^id|)
+            foreach (TournamentModel model in models)
+            {
+                modelsData.Add($@"{model.Id}, {model.TournamentName}, {model.EntryFee},
+                   {ConvertTeamsListToString(model.Teams)}, 
+                   {ConvertPrizesListToString(model.Prizes)}, 
+                   {ConvertRoundsListToString(model.Rounds)}");
+            }
+            File.WriteAllLines(fileName.GetFilePath(), modelsData);
+        }
+
+        #endregion
+
+
+        #region HELPER methods
+
+        /// <summary>
+        /// Helper method to delimit TeamMembers ids with '|'
+        /// </summary>
+        /// <param name="people">TeamMembers data in PersonModel</param>
         /// <returns>TeamMember Ids concat with '|' as string</returns>
         private static string ConvertTeamMembersListToString(List<PersonModel> people)
         {
@@ -255,16 +282,88 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             }
 
             // if people is NOT empty
-            string output = "";
+            string output = string.Empty;
             foreach (var person in people)      // loop to append each personId with '|'
             {
-                output += $"{person.Id}|";
+                output += $"{ person.Id }|";
             }
             output = output.Substring(0, output.Length - 1);    // un-append '|' for last item
             return output;
         }
 
+        /// <summary>
+        /// Helper method to delimit Team ids with '|'
+        /// </summary>
+        /// <param name="teams">Teams data in TeamModel</param>
+        /// <returns>Team Ids concat with '|' as string</returns>
+        private static string ConvertTeamsListToString(List<TeamModel> teams)
+        {
+            if (teams.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            string output = string.Empty;
+            foreach (var team in teams)
+            {
+                output += $"{ team.Id }|";
+            }
+            output = output.Substring(0, output.Length-1);
+            return output;
+        }
+
+        /// <summary>
+        /// Helper method to delimit Prize ids with '|'
+        /// </summary>
+        /// <param name="prizes">Prizes data in PrizeModel</param>
+        /// <returns>Prize Ids concat with '|' as string</returns>
+        private static string ConvertPrizesListToString(List<PrizeModel> prizes)
+        {
+            if(prizes.Count == 0) { return string.Empty; }
+
+            string output = string.Empty;
+            foreach (PrizeModel prize in prizes) 
+            {
+                output += $"{ prize.Id }|";
+            }
+            output = output.Substring(0, output.Length - 1);
+            return output;
+        }
+
+        /// <summary>
+        /// Helper method to extract ids and delimt with ^ and rounds with  '|'
+        /// </summary>
+        /// <param name="rounds">Nested list MatchModel with match ids </param>
+        /// <returns>formatted string with match ids delimited by '^' and rounds delimited by '|'</returns>
+        private static string ConvertRoundsListToString(List<List<MatchModel>> rounds)
+        {
+            // data layout to follow - (Rounds-id^id^id|id^id^id|id^id^id|)
+            if (rounds.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            string output = string.Empty;
+            // nested foreach loop to extract Id element from rounds 
+            foreach (List<MatchModel> round in rounds)
+            {
+                foreach(MatchModel match in round)
+                {
+                    output += $"{match.Id}^";
+                }
+                // remove excess '^' after last match id 
+                output = output.Substring(0, output.Length - 1);
+                output += "|";
+            }
+            // remove excess '|' after round match ids
+            output = output.Substring(0, output.Length - 1);
+            return output;
+        }
+
+
         #endregion
     }
+
+
 }
 

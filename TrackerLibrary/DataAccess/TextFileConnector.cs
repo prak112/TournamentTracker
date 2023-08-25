@@ -126,10 +126,10 @@ namespace TrackerLibrary.DataAccess
             // add new record to Model
             tournamentModels.Add(model);
 
-            // save Model data to TeamsDataFile
-            //tournamentModels.SaveDataToTeamsFile(TeamsDataFile);
+            // save Model data to TournamentsDataFile
+            tournamentModels.SaveDataToTournamentsFile(TournamentsDataFile);
 
-            return model;
+            return model; // not neccessary in all methods so far in TextFileConnector, to be changed from IDataConnection
         } 
         #endregion
 
