@@ -144,8 +144,9 @@ namespace TrackerLibrary.DataAccess
             }
             return model;
         } 
+
         /// <summary>
-        /// CreateTournament split method-part 1
+        /// CreateTournament helper method-to save basic data
         /// </summary>
         /// <param name="conn">db connection string</param>
         /// <param name="model">tournament form data</param>
@@ -162,8 +163,9 @@ namespace TrackerLibrary.DataAccess
 
             model.Id = tournamentData.Get<int>("@id");
         }
+        
         /// <summary>
-        /// CreateTournament split method-part 2
+        /// CreateTournament helper method-to save teams data
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="model"></param>
@@ -179,8 +181,9 @@ namespace TrackerLibrary.DataAccess
                 conn.Execute("dbo.spTournamentEntries_InsertData", tournamentData, commandType: CommandType.StoredProcedure);
             }
         }
+        
         /// <summary>
-        /// CreateTournament split method-part 3
+        /// CreateTournament helper method-to save prizes data
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="model"></param>
@@ -236,7 +239,6 @@ namespace TrackerLibrary.DataAccess
             }
             return output;
         }
-
 
         /// <summary>
         /// Activate stored procedure to retrieve data from Teams table
