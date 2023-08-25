@@ -9,17 +9,22 @@ namespace TrackerLibrary.Models
     public class MatchModel
     {
         /// <summary>
-        /// Represents names of competing teams for the current match
+        /// unique identifier for every match
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// competing teams for the current match
         /// </summary>
         public List<MatchRegistryModel> Entries { get; set; } = new List<MatchRegistryModel>();
         
         /// <summary>
-        /// Represents winner team of the current match
+        /// winner team of the current match
         /// </summary>
         public TeamModel Winner { get; set; }
         
         /// <summary>
-        /// Represents current round of match
+        /// current round of match
         /// </summary>
         public int MatchRound { get; set; }
     }
