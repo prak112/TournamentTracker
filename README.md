@@ -560,7 +560,12 @@ populate data -> store data -> data interaction</li>
 		```
 		</details>
 
-- 
+- Cases for data type casting :
+	- VALID Case : <code>string</code> to <code>int</code>/<code>double</code>/<code>decimal</code>, i.e., from string to a numerical format
+	- INVALID Case : <code>int</code> to <code>double</code>, viceversa, or to any other numerical format
+- Possible data loss and inefficient outputs
+ 
+
 
 
 
