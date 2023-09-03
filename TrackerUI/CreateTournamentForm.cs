@@ -212,12 +212,8 @@ namespace TrackerUI
                 tournament.Prizes = selectedPrizes;
                 tournament.Teams = selectedTeams;
 
-                // TODO - Wire MatchModels
-                // Team lists randomization - to prevent systematic or biased match modeling
-                // Verify Randomized team lists for match modeling, IF insufficient add Byes - 2^n Teams required for smooth match modeling
-                // Create 1st MatchRound
-                // Create every round with Match Ids from MatchRound 1
-
+                // Wire MatchModels
+                TournamentLogic.CreateRounds(tournament);
 
                 // pass model data to sql server
                 GlobalConfig.Connection.CreateTournament(tournament);
