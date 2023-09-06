@@ -9,17 +9,22 @@ namespace TrackerLibrary.Models
     public class MatchRegistryModel
     {
         /// <summary>
-        /// Represents one team in the Match
+        /// unique identifier for each record
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Team data of one of the competing teams in the Match
         /// </summary>
         public TeamModel CompetingTeam { get; set; }
 
         /// <summary>
-        /// Represents score of the CompetingTeam
+        /// score of the CompetingTeam
         /// </summary>
         public int Score { get; set; }
 
         /// <summary>
-        /// Represents the Match the CompetingTeam won previously
+        /// MatchId of the CompetingTeam which won previously
         /// </summary>
         public MatchModel ParentMatch { get; set; }
 
