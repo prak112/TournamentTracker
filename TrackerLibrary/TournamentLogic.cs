@@ -112,7 +112,12 @@ namespace TrackerLibrary
         }
 
 
-        // find byes required for totalRounds;
+        /// <summary>
+        /// Calculate byes required for round 1 in tournament 
+        /// </summary>
+        /// <param name="totalRounds">Total rounds of matches</param>
+        /// <param name="teamCount">Total teams playing in tournament</param>
+        /// <returns>Byes required for round 1</returns>
         private static int FindTotalByes(int totalRounds, int teamCount)
         {
             int output;
@@ -127,8 +132,11 @@ namespace TrackerLibrary
             return output;
         }
 
-
-        // find rounds required for randomizedTeams
+        /// <summary>
+        /// Calculate rounds required for tournament
+        /// </summary>
+        /// <param name="teamCount">Total teams playing in tournament</param>
+        /// <returns>Total rounds required for tournament</returns>
         private static int FindTotalRounds(int teamCount)
         {
             // Tim's logic - simplified from logs and pows
@@ -144,7 +152,11 @@ namespace TrackerLibrary
             return output;
         }
 
-        // team list randomization
+        /// <summary>
+        /// Randomize list of teams
+        /// </summary>
+        /// <param name="teamsList">List of teams playing in tournament</param>
+        /// <returns>Randomized list of teams</returns>
         private static List<TeamModel> RandomizeTeamOrder(List<TeamModel> teamsList)
         {
             List<TeamModel> randomizedTeams = teamsList.OrderBy(t => Guid.NewGuid()).ToList(); // Logic inspired from https://stackoverflow.com/questions/273313/randomize-a-listt
