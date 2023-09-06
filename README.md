@@ -196,7 +196,7 @@ Documents will be seperated at the end of the project.</b><p>
 			<ul>
 				<i>
 				<li>Entries (List<<b>MatchRegistry</b>>)</li>
-				<li>Winner (<b>Team</b>)</li>
+				<li>WinnerId (<b>Team</b>)</li>
 				<li>MatchRound (int)</li>
 				</i>
 			</ul>
@@ -209,7 +209,7 @@ Documents will be seperated at the end of the project.</b><p>
 				<i>
 				<li>CompetingTeam (<b>Team</b>)
 				<li>Score (int)</li>
-				<li>ParentMatch (<b>Match</b>)</li>
+				<li>ParentMatchId (<b>Match</b>)</li>
 				</i>
 			</ul>
 		</td>
