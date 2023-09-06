@@ -218,15 +218,18 @@ namespace TrackerUI
                 // pass model data to sql server
                 GlobalConfig.Connection.CreateTournament(tournament);
 
+                MessageBox.Show("Tournament creation successful!", "Success!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Please chekc and re-enter valid information for Tournament Name/Entry Fee/Prizes/Teams.",
+                MessageBox.Show("Please check and re-enter valid information for Tournament Name/Entry Fee/Prizes/Teams.",
                     "Invalid Information",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
-
 
 
             // save name, entryfee, prizesListBox, tournamentPlayersListBox info to data storage
