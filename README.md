@@ -519,8 +519,10 @@ populate data -> store data -> data interaction</li>
 </fieldset>
 
 - Application Development Layout, as understood from Lessons so far (till Lesson10-SQL Connection)
-  ![Application Development Layout](ApplicationDevelopment-Layout.jpg)
-- *Post organizing files into directories, ALWAYS verify and modify namespaces*
+	![Application Development Layout](ApplicationDevelopment-Layout.jpg)
+
+- Post organizing files into directories, ALWAYS verify and modify namespaces
+
 - [**this** modifier](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods) :
 	- A parameter in a method is preceded by the above modifier
 	- Used in Extension methods 
@@ -530,41 +532,47 @@ populate data -> store data -> data interaction</li>
 	
 		```csharp
 
-				// EXTENSION METHOD DEFINITION -
-				namespace ExtensionMethods
+		// EXTENSION METHOD DEFINITION -
+		namespace ExtensionMethods
+		{
+			public static class MyExtension
+			{
+				public static int WordCount(this string str)
 				{
-					public static class MyExtension
-					{
-						public static int WordCount(this string str)
-						{
-							int count = str.Split(new char[] { ' ', '.', '?' }, StringSplitOptions.RemoveEmptyEntries).Length;
-							return count;
-						}
-					}
+					int count = str.Split(new char[] { ' ', '.', '?' }, 
+											StringSplitOptions.RemoveEmptyEntries).Length;
+					return count;
 				}
+			}
+		}
 		
 
-				// SOURCE CODE - 
-				// call with Instance method syntax as follows
+		// SOURCE CODE - 
+		// call with Instance method syntax as follows
 		
-				using ExtensionMethods;
+		using ExtensionMethods;
 
-				string s = "Hello Extension Method";
-				int i = s.WordCount();
+		string s = "Hello Extension Method";
+		int i = s.WordCount();
 
 		
-				// OR call with Static method syntax, by passing arguments
+		// OR call with Static method syntax, by passing arguments
 		
-				string s = "Hello Extension Method";
-				int i = MyExtension.WordCount(s);
+		string s = "Hello Extension Method";
+		int i = MyExtension.WordCount(s);
 		```
 		</details>
 
 - Cases for data type casting :
 	- VALID Case : <code>string</code> to <code>int</code>/<code>double</code>/<code>decimal</code>, i.e., from string to a numerical format
 	- INVALID Case : <code>int</code> to <code>double</code>, viceversa, or to any other numerical format
-- Possible data loss and inefficient outputs
- 
+		- Possible data loss and inefficient outputs
+
+- With current level of logical understanding, the following seems complex and hard to follow:
+	- Logic behind Data storage to SQL and Textfiles for -
+		- [Matching Teams](/Models/MatchModel.cs) and 
+		- [Registering Playing/Played Match entries](/Models/MatchRegistryModel.cs) 
+	- Nevertheless, keep up - slowly but steadily.
 
 
 
