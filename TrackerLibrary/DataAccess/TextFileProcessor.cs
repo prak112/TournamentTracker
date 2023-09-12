@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TrackerLibrary.Models;
@@ -14,6 +15,8 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
     /// </summary>
     public static class TextFileProcessor
     {
+        #region PROCEDURAL STORAGE METHODS
+        
         /// <summary>
         /// Get full filepath using filename
         /// </summary>
@@ -39,14 +42,16 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             return File.ReadAllLines(file).ToList();
         }
 
+        #endregion
 
         // LOAD DATA TO MODEL OBJECT
 
         #region LOAD TEXT FILE DATA TO MODEL methods
+        
         /// <summary>
-        /// Read textData from List, load data to Model object
+        /// Read textData from List, load prizes data to Model
         /// </summary>
-        /// <param name="textData">text retrieved from file</param>
+        /// <param name="textData">data retrieved from PrizeModels.csv to List</param>
         /// <returns>Model object with data, or empty Model object if no data to load</returns>
         public static List<PrizeModel> LoadDataToPrizeModel(this List<string> textData)
         {
@@ -57,7 +62,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 // split lines
                 string[] columns = line.Split(',');
 
-                // pack split data into Model's variables
+                // pack split entries into Model's properties
                 PrizeModel prizeData = new PrizeModel();
                 prizeData.Id = int.Parse(columns[0]);
                 prizeData.Position = int.Parse(columns[1]);
@@ -73,7 +78,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// <summary>
         /// Read textData from List, load persons data to Model
         /// </summary>
-        /// <param name="textData">data read from file to List</param>
+        /// <param name="textData">data read from PersonModels.csv to List</param>
         /// <returns>Model object loaded with data, empty object if no data</returns>
         public static List<PersonModel> LoadDataToPersonModel(this List<string> textData)
         {
@@ -99,11 +104,11 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         }
 
         /// <summary>
-        /// Read text data from List, load teams data to Model
+        /// Read textData from List, load teams data to Model
         /// </summary>
-        /// <param name="textData">data from text file, TeamsDataFile.csv</param>
-        /// <param name="peopleFileName">text file to retrieve personId</param>
-        /// <returns>Model object with updated data, empty object if no data</returns>
+        /// <param name="textData">data from TeamModels.csv to List</param>
+        /// <param name="peopleFileName">PersonModels.csv to retrieve personId</param>
+        /// <returns>Model with updated data, empty object if no data</returns>
         public static List<TeamModel> LoadDataToTeamModel(this List<string> textData, string peopleFileName)
         {
             // pack split data into Model's variables
@@ -135,7 +140,75 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             return output;
         }
 
+              
+        /// <summary>
+        /// Read textData from List, load matches data to Model
+        /// </summary>
+        /// <param name="textData">data from MatchModels.csv to List</param>
+        /// <returns>Model with updated data, empty object if no data</returns>
+        public static List<MatchModel> LoadDataToMatchModel(this List<string> textData)
+        {
+            List<MatchModel> output = new List<MatchModel>();
+            
+            // loop through textData entries
+            foreach (string line in textData)
+            {
+                // split entries
+                string[] columns = line.Split(',');
 
+                // pack split entries into Model's properties
+                MatchModel matchData = new MatchModel();
+                matchData.Id = int.Parse(columns[0]);
+                matchData.Entries = ConvertMatchRegistryStringToList(columns[1]);   // String-To-List conversion
+                matchData.Winner = LookUpTeamById(int.Parse(columns[2]));       // TeamModel data
+                matchData.MatchRound = int.Parse(columns[3]);
+                
+                output.Add(matchData);
+            }
+            return output;
+        }
+        
+        /// <summary>
+        /// Read textData from List, load match entries data to Model
+        /// </summary>
+        /// <param name="textData">data from MatchRegistryModels.csv to List</param>
+        /// <returns>Model with updated data, empty object if no data</returns>
+        public static List<MatchRegistryModel> LoadDataToMatchRegistryModel(this List<string> textData)
+        {
+            List<MatchRegistryModel> output = new List<MatchRegistryModel>();
+
+            foreach (string line in textData)
+            {
+                string[] columns = line.Split('|');
+                
+                MatchRegistryModel matchEntry = new MatchRegistryModel();
+                matchEntry.Id = int.Parse(columns[0]);
+                matchEntry.CompetingTeam = LookUpTeamById(int.Parse(columns[1])); // TeamModel data
+                matchEntry.Score = int.Parse(columns[2]);
+
+                int parentMatchId = 0;
+                if (int.TryParse(columns[3], out parentMatchId))
+                {
+                    matchEntry.ParentMatch = LookUpMatchById(parentMatchId);    // MatchModel data
+                }
+                else
+                {
+                    matchEntry.ParentMatch = null;
+                }
+                output.Add(matchEntry);
+            }
+            return output;
+        }
+
+
+        /// <summary>
+        /// Read textData from TournamentModels.csv to List, load tournaments data to Model
+        /// </summary>
+        /// <param name="textData">data read from TournamentModels.csv</param>
+        /// <param name="peopleFileName">PersonModels.csv to read person data</param>
+        /// <param name="TeamsFile">TeamModels.csv to read team data</param>
+        /// <param name="PrizesFile">PrizeModels.csv to read prize data</param>
+        /// <returns>Model with updated data, empty object if no data</returns>
         public static List<TournamentModel> LoadDataToTournamentModel
             (this List<string> textData, string peopleFileName, string TeamsFile, string PrizesFile)
         {
@@ -145,6 +218,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             List<TournamentModel> output = new List<TournamentModel>();
             List<TeamModel> teams = TeamsFile.GetFilePath().ReadFileToList().LoadDataToTeamModel(peopleFileName);
             List<PrizeModel> prizes = PrizesFile.GetFilePath().ReadFileToList().LoadDataToPrizeModel();
+            List<MatchModel> matches = GlobalConfig.MatchDataFile.GetFilePath().ReadFileToList().LoadDataToMatchModel();
 
             foreach (string line in textData)
             {
@@ -171,12 +245,16 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 }
 
                 // Rounds data
-                // TODO - Retrieve Rounds data from MatchModel
+                string[] rounds = columns[5].Split('|');
+                
+                foreach (string round in rounds)
+                {
+                    string[] ms = round.Split('^');
 
+                }
 
                 output.Add(tournamentData);
             }
-
             return output;
         }
 
@@ -184,9 +262,12 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         #endregion
 
 
+
         // SAVE DATA TO TEXT FILE
 
         #region SAVE MODEL DATA TO TEXT FILE methods
+
+
         /// <summary>
         /// Save updated PrizeModel data to text file
         /// </summary>
@@ -243,6 +324,9 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
         }
 
+
+        // TOURNAMENT DATA - (Matches, MatchEntries, MatchRounds)
+
         /// <summary>
         /// Save updated TournamentModel data to TournamentsData.csv
         /// </summary>
@@ -253,7 +337,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
             // data layout
             // column Index - 0          1            2           3                   4                   5 
-            // column name - id, TournamentName, EntryFee, (Teams-Id|Id|Id), (Prizes-Id|Id|Id), (Rounds-id^id^id|id^id^id|id^id^id|)
+            // column name - id, TournamentName, EntryFee, (Teams-Id|Id|Id), (Prizes-Id|Id|Id), (Rounds-id^id|id^id|id^id|)
             foreach (TournamentModel model in models)
             {
                 modelsData.Add($@"{model.Id}, {model.TournamentName}, {model.EntryFee},
@@ -264,10 +348,224 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
         }
 
+        /// <summary>
+        /// Save Match rounds data to TournamentModels.csv
+        /// </summary>
+        /// <param name="model">TournamentModel object</param>
+        /// <param name="MatchDataFile">MatchModels.csv file</param>
+        /// <param name="MatchRegistryDataFile">MatchRegistryModels.csv file</param>
+        public static void SaveRoundsToTournamentsFile(this TournamentModel model, string MatchDataFile, string MatchRegistryDataFile)
+        {
+            foreach (List<MatchModel> round in model.Rounds)
+            {
+                foreach (MatchModel match in round)
+                {
+                    // performed by Helper Methods- SaveMatchToTournamentsFile, SaveEntryToTournamentsFile
+                    // (and their subsequent Helper Methods)
+                    match.SaveMatchToTournamentsFile(MatchDataFile, MatchRegistryDataFile);
+                }
+            }
+        }
+
+        /// <summary>
+        /// SaveRoundsToTournamentsFile Helper Method-
+        /// save matches to MatchModels.csv, 
+        /// save match entries to MatchRegistryModels.csv
+        /// </summary>
+        /// <param name="match">MatchModel object of the TournamentModel object</param>
+        /// <param name="MatchDataFile">MatchModels.csv</param>
+        /// <param name="MatchRegistryDataFile">MatchRegistryModels.csv</param>
+        public static void SaveMatchToTournamentsFile(this MatchModel match, string MatchDataFile, string MatchRegistryDataFile)
+        {
+            List<MatchModel> matches = GlobalConfig.MatchDataFile.
+                                        GetFilePath().ReadFileToList().
+                                        LoadDataToMatchModel();
+            // scan for max(Id), add 1, assign max(Id)+1 to next record
+            int currentId = 1;
+            if (matches.Count > 0)
+            {
+                currentId = matches.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+            }
+            match.Id = currentId;
+
+            // save match entries
+            foreach (MatchRegistryModel entry in match.Entries)
+            {
+                entry.SaveEntryToTournamentsFile(MatchRegistryDataFile);
+            }
+            // Save matches
+            List<string> modelsData = new List<string>();
+            foreach (MatchModel m in matches)
+            {
+                // verify Winner for Round 1 matches
+                string winner = string.Empty;
+                if (m.Winner != null)
+                {
+                    winner = m.Winner.Id.ToString();
+                }
+                modelsData.Add($"{m.Id}, {ConvertMatchEntriesListToString(m.Entries)}, {winner}, {m.MatchRound}");
+            }
+            // write data to MatchDataFile
+            File.WriteAllLines(MatchDataFile, modelsData);
+        }
+
+        /// <summary>
+        /// SaveRoundsToTournamentsFile Helper Method-
+        /// save match entries to MatchRegistryModels.csv
+        /// </summary>
+        /// <param name="entry">MatchRegistryModel list from MatchModel</param>
+        /// <param name="MatchRegistryDataFile">MatchRegistryModels.csv</param>
+        public static void SaveEntryToTournamentsFile(this MatchRegistryModel entry, string MatchRegistryDataFile) 
+        {
+            List<MatchRegistryModel> matchEntries = GlobalConfig.MatchRegistryDataFile.
+                                                        GetFilePath().ReadFileToList().
+                                                        LoadDataToMatchRegistryModel();
+            // scan for max(Id), add 1, assign max(Id)+1 to next record
+            int currentId = 1;
+            if (matchEntries.Count > 0)
+            {
+                currentId = matchEntries.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+            }
+            entry.Id = currentId;
+            matchEntries.Add(entry);
+
+            // Save matchEntries
+            List<string> modelsData = new List<string>();
+            foreach (MatchRegistryModel mE in matchEntries)
+            {
+                // verify ParentMatch for Round 1 matches
+                string parentMatch = string.Empty;
+                if (mE.ParentMatch != null)
+                {
+                    parentMatch = mE.ParentMatch.Id.ToString();
+                }
+                modelsData.Add($"{mE.Id}, {mE.CompetingTeam.Id}, {mE.Score}, {parentMatch}");
+            }
+            // write all data to MatchRegistryDataFile
+            File.WriteAllLines(MatchRegistryDataFile, modelsData);
+        }
+
+
         #endregion
 
 
+
         #region HELPER methods
+
+        // LOOKUP METHODS
+        
+        /// <summary>
+        /// Lookup by MatchId for ParentMatch in MatchRegistryModel
+        /// </summary>
+        /// <param name="matchId">filter condition</param>
+        /// <returns>filtered MatchModel data by matchId</returns>
+        private static MatchModel LookUpMatchById(int matchId)
+        {
+            // Get all Matches data
+            List<MatchModel> matches = GlobalConfig.MatchDataFile.
+                                        GetFilePath().ReadFileToList().LoadDataToMatchModel();
+
+            // filter by matchId in textData for MatchRegistryModel
+            MatchModel match = matches.Where(x => x.Id == matchId).First();
+            return match;
+        }
+
+        /// <summary>
+        /// Lookup by TeamId for Winner in MatchModel
+        /// </summary>
+        /// <param name="teamId">filter condition</param>
+        /// <returns>filtered TeamModel data by TeamId</returns>
+        private static TeamModel LookUpTeamById(int teamId)
+        {
+            // Get all teams data
+            List<TeamModel> teams = GlobalConfig.TeamsDataFile.
+                                        GetFilePath().ReadFileToList().
+                                        LoadDataToTeamModel(GlobalConfig.PeopleDataFile);
+
+            // scan through for teamId
+            TeamModel lookUpTeam = teams.Where(x => x.Id == teamId).First();
+
+            return lookUpTeam;
+        }
+
+
+        // STRING-TO-LIST METHOD
+
+        /// <summary>
+        /// Convert MatchRegistryModel data from string to List to load MatchModel
+        /// </summary>
+        /// <param name="textData">data retrieved from MatchRegistryModels.csv</param>
+        /// <returns>Sorted data into MatchRegistryModel by MatchId</returns>
+        private static List<MatchRegistryModel> ConvertMatchRegistryStringToList(this string textData)
+        {
+            string[] matchIds = textData.Split('|');
+
+            List<MatchRegistryModel> output = new List<MatchRegistryModel>();
+            List<MatchRegistryModel> matchEntries = GlobalConfig.MatchRegistryDataFile.
+                                                        GetFilePath().ReadFileToList().LoadDataToMatchRegistryModel();
+
+            foreach (string matchId in matchIds)
+            {
+                // filter registry entry for specific matchId 
+                MatchRegistryModel entry = matchEntries.Where(x => x.Id == int.Parse(matchId)).First();
+                output.Add(entry);
+            }
+            return output;
+        }
+
+
+        // LIST-TO-STRING METHODS
+
+        /// <summary>
+        /// Helper method to extract ids and delimt with ^ and rounds with  '|'
+        /// </summary>
+        /// <param name="rounds">Nested list MatchModel with match ids </param>
+        /// <returns>formatted string with match ids delimited by '^' and rounds delimited by '|'</returns>
+        private static string ConvertRoundsListToString(List<List<MatchModel>> rounds)
+        {
+            // data layout to follow - (Rounds-id^id^id|id^id^id|id^id^id|)
+            if (rounds.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            string output = string.Empty;
+            // nested foreach loop to extract Id element from rounds 
+            foreach (List<MatchModel> round in rounds)
+            {
+                foreach (MatchModel match in round)
+                {
+                    output += $"{match.Id}^";
+                }
+                // remove excess '^' after last match id 
+                output = output.Substring(0, output.Length - 1);
+                output += "|";
+            }
+            // remove excess '|' after round match ids
+            output = output.Substring(0, output.Length - 1);
+            return output;
+        }
+
+        /// <summary>
+        /// Helper method to delimit MatchRegistry ids with '|'
+        /// </summary>
+        /// <param name="matchEntries">list of Entries in MatchModel</param>
+        /// <returns>Entries ids list delimited with '|'</returns>
+        private static string ConvertMatchEntriesListToString(List<MatchRegistryModel> matchEntries)
+        {
+            if (matchEntries.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            string output = string.Empty;
+            foreach (MatchRegistryModel entry in matchEntries)
+            {
+                output += $"{entry.Id}|";
+            }
+            output = output.Substring(0, output.Length - 1); // unappend '|' for last item
+            return output;
+        }
 
         /// <summary>
         /// Helper method to delimit TeamMembers ids with '|'
@@ -283,11 +581,11 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
             // if people is NOT empty
             string output = string.Empty;
-            foreach (var person in people)      // loop to append each personId with '|'
+            foreach (PersonModel person in people)      // loop to append each personId with '|'
             {
-                output += $"{ person.Id }|";
+                output += $"{person.Id}|";
             }
-            output = output.Substring(0, output.Length - 1);    // un-append '|' for last item
+            output = output.Substring(0, output.Length - 1);    // unappend '|' for last item
             return output;
         }
 
@@ -326,36 +624,6 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             {
                 output += $"{ prize.Id }|";
             }
-            output = output.Substring(0, output.Length - 1);
-            return output;
-        }
-
-        /// <summary>
-        /// Helper method to extract ids and delimt with ^ and rounds with  '|'
-        /// </summary>
-        /// <param name="rounds">Nested list MatchModel with match ids </param>
-        /// <returns>formatted string with match ids delimited by '^' and rounds delimited by '|'</returns>
-        private static string ConvertRoundsListToString(List<List<MatchModel>> rounds)
-        {
-            // data layout to follow - (Rounds-id^id^id|id^id^id|id^id^id|)
-            if (rounds.Count == 0)
-            {
-                return string.Empty;
-            }
-
-            string output = string.Empty;
-            // nested foreach loop to extract Id element from rounds 
-            foreach (List<MatchModel> round in rounds)
-            {
-                foreach(MatchModel match in round)
-                {
-                    output += $"{match.Id}^";
-                }
-                // remove excess '^' after last match id 
-                output = output.Substring(0, output.Length - 1);
-                output += "|";
-            }
-            // remove excess '|' after round match ids
             output = output.Substring(0, output.Length - 1);
             return output;
         }

@@ -10,10 +10,12 @@ namespace TrackerLibrary.DataAccess
 {
     public class TextFileConnector : IDataConnection
     {
-        private const string PrizesDataFile = "PrizesData.csv";
-        private const string PeopleDataFile = "PersonsData.csv";
-        private const string TeamsDataFile = "TeamsData.csv";
-        private const string TournamentsDataFile = "TournamentsData.csv";
+        private const string PrizesDataFile = "PrizeModels.csv";
+        private const string PeopleDataFile = "PersonModels.csv";
+        private const string TeamsDataFile = "TeamModels.csv";
+        private const string TournamentsDataFile = "TournamentModels.csv";
+        private const string MatchDataFile = "MatchModels.csv";
+        private const string MatchRegistryDataFile = "MatchRegistryModels.csv";
 
 
         #region PROCESS MODEL DATA AND SAVE TO FILE methods
@@ -115,13 +117,17 @@ namespace TrackerLibrary.DataAccess
                 .ReadFileToList()
                 .LoadDataToTournamentModel(PeopleDataFile, TeamsDataFile, PrizesDataFile);
 
-            // scan for max(Id), add 1, assign max(Id)+1 to next record
             int currentId = 1;
+
+            // scan for max(Id), add 1, assign max(Id)+1 to next record
             if (tournamentModels.Count > 0)
             {
                 currentId = tournamentModels.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
             }
             model.Id = currentId;
+
+            // save Match rounds
+            model.SaveRoundsToTournamentsFile(MatchDataFile, MatchRegistryDataFile);
 
             // add new record to Model
             tournamentModels.Add(model);
@@ -145,6 +151,10 @@ namespace TrackerLibrary.DataAccess
             return persons;
         }
 
+        /// <summary>
+        /// Retrieve all prizes data
+        /// </summary>
+        /// <returns>List of prizes and related info</returns>
         public List<PrizeModel> GetPrize_All()
         {
             List<PrizeModel> prizes = PrizesDataFile.GetFilePath().ReadFileToList().LoadDataToPrizeModel();
