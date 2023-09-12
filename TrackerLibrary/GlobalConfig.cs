@@ -16,6 +16,15 @@ namespace TrackerLibrary
         /// </summary>
         public static IDataConnection Connection { get; private set; }
 
+        /// <summary>
+        /// Textfile storage for each Model
+        /// </summary>
+        public const string PrizesDataFile = "PrizeModels.csv";
+        public const string PeopleDataFile = "PersonModels.csv";
+        public const string TeamsDataFile = "TeamModels.csv";
+        public const string TournamentsDataFile = "TournamentModels.csv";
+        public const string MatchDataFile = "MatchModels.csv";
+        public const string MatchRegistryDataFile = "MatchRegistryModels.csv";
 
         /// <summary>
         /// To intialize all possible data source Connection for data storage
