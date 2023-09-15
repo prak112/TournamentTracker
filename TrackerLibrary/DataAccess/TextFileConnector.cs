@@ -47,7 +47,6 @@ namespace TrackerLibrary.DataAccess
             return model;
         }
 
-
         /// <summary>
         /// Process Tournament Prize information and save to PrizesDataFile
         /// </summary>

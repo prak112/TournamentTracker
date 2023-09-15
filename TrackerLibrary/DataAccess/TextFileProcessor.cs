@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackerLibrary.Models;
 
@@ -179,11 +180,20 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
             foreach (string line in textData)
             {
-                string[] columns = line.Split('|');
+                string[] columns = line.Split(',');
                 
                 MatchRegistryModel matchEntry = new MatchRegistryModel();
                 matchEntry.Id = int.Parse(columns[0]);
-                matchEntry.CompetingTeam = LookUpTeamById(int.Parse(columns[1])); // TeamModel data
+                int competingTeam = 0;
+                if (int.TryParse(columns[1], out competingTeam))     // CompetingTeam could be null, due to lack of knowledge about future matches
+                {
+                    matchEntry.CompetingTeam = LookUpTeamById(competingTeam); // TeamModel data
+                }
+                else
+                {
+                    matchEntry.CompetingTeam = null;
+                }
+                
                 matchEntry.Score = int.Parse(columns[2]);
 
                 int parentMatchId = 0;
@@ -245,14 +255,24 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 }
 
                 // Rounds data
+                // split rounds
                 string[] rounds = columns[5].Split('|');
-                
+
                 foreach (string round in rounds)
                 {
-                    string[] ms = round.Split('^');
-
+                    // assign matchId to MatchModel object,
+                    List<MatchModel> matchesInRound = new List<MatchModel>();
+                    // split matches
+                    string[] matchIds = round.Split('^');
+                    // add object to matchesInRound,
+                    foreach (string matchId in matchIds)
+                    {
+                        MatchModel match = new MatchModel();
+                        matchesInRound.Add(matches.Where(x => x.Id == int.Parse(matchId)).FirstOrDefault());
+                    }
+                    // add matchesInRound to tournamentData
+                    tournamentData.Rounds.Add(matchesInRound);
                 }
-
                 output.Add(tournamentData);
             }
             return output;
@@ -281,7 +301,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             // loop data of each Model, add to List<string>
             foreach (var model in models)
             {
-                modelsData.Add($"{model.Id}, {model.Position}, {model.PositionName}, {model.PrizeAmount}, {model.PrizePercentage}");
+                modelsData.Add($"{model.Id},{model.Position},{model.PositionName},{model.PrizeAmount},{model.PrizePercentage}");
             }
             // write data from List<string> to given fileName
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
@@ -300,7 +320,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             // loop data of each Model, add to List<string>
             foreach (var model in models)
             {
-                modelsData.Add($"{model.Id}, {model.FirstName}, {model.LastName}, {model.Email}, {model.PhoneNumber}, {model.RegistrationDate}");
+                modelsData.Add($"{model.Id},{model.FirstName},{model.LastName},{model.Email},{model.PhoneNumber},{model.RegistrationDate}");
             }
             // write data from modelsData to fileName
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
@@ -317,7 +337,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
 
             foreach (var model in models)
             {
-                modelsData.Add($"{model.Id}, {model.TeamName}, {ConvertTeamMembersListToString(model.TeamMembers)}");
+                modelsData.Add($"{model.Id},{model.TeamName},{ConvertTeamMembersListToString(model.TeamMembers)}");
             }
             // write data from modelsData to fileName
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
@@ -340,10 +360,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             // column name - id, TournamentName, EntryFee, (Teams-Id|Id|Id), (Prizes-Id|Id|Id), (Rounds-id^id|id^id|id^id|)
             foreach (TournamentModel model in models)
             {
-                modelsData.Add($@"{model.Id}, {model.TournamentName}, {model.EntryFee},
-                   {ConvertTeamsListToString(model.Teams)}, 
-                   {ConvertPrizesListToString(model.Prizes)}, 
-                   {ConvertRoundsListToString(model.Rounds)}");
+                modelsData.Add($@"{model.Id},{model.TournamentName},{model.EntryFee},{ConvertTeamsListToString(model.Teams)},{ConvertPrizesListToString(model.Prizes)},{ConvertRoundsListToString(model.Rounds)}");
             }
             File.WriteAllLines(fileName.GetFilePath(), modelsData);
         }
@@ -360,9 +377,9 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             {
                 foreach (MatchModel match in round)
                 {
-                    // performed by Helper Methods- SaveMatchToTournamentsFile, SaveEntryToTournamentsFile
+                    // performed by Helper Methods- SaveMatchToMatchesFile, SaveEntryToMatchRegistryFile
                     // (and their subsequent Helper Methods)
-                    match.SaveMatchToTournamentsFile(MatchDataFile, MatchRegistryDataFile);
+                    match.SaveMatchToMatchesFile(MatchDataFile, MatchRegistryDataFile);
                 }
             }
         }
@@ -375,7 +392,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// <param name="match">MatchModel object of the TournamentModel object</param>
         /// <param name="MatchDataFile">MatchModels.csv</param>
         /// <param name="MatchRegistryDataFile">MatchRegistryModels.csv</param>
-        public static void SaveMatchToTournamentsFile(this MatchModel match, string MatchDataFile, string MatchRegistryDataFile)
+        public static void SaveMatchToMatchesFile(this MatchModel match, string MatchDataFile, string MatchRegistryDataFile)
         {
             List<MatchModel> matches = GlobalConfig.MatchDataFile.
                                         GetFilePath().ReadFileToList().
@@ -384,15 +401,20 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             int currentId = 1;
             if (matches.Count > 0)
             {
-                currentId = matches.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
+                currentId = matches.OrderByDescending(x => x.Id).First().Id + 1;
             }
             match.Id = currentId;
 
-            // save match entries
-            foreach (MatchRegistryModel entry in match.Entries)
-            {
-                entry.SaveEntryToTournamentsFile(MatchRegistryDataFile);
-            }
+
+            // TODO - Resolve ISSUE ChickenFirst-EggFirst problem
+            // MatchModel (save matches) needs to be executed before MatchModel-Entries (save match entries)
+            // To debug "Sequence contains no elements" ERROR
+            // Check below for implementation of SaveMatchesInSequence method
+
+            // save matches and match entries in sequence
+            //match.Entries = SaveMatchesInSequence(match.Entries);
+
+
             // Save matches
             List<string> modelsData = new List<string>();
             foreach (MatchModel m in matches)
@@ -403,11 +425,52 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 {
                     winner = m.Winner.Id.ToString();
                 }
-                modelsData.Add($"{m.Id}, {ConvertMatchEntriesListToString(m.Entries)}, {winner}, {m.MatchRound}");
+                modelsData.Add($"{m.Id},{""},{winner},{m.MatchRound}");
             }
             // write data to MatchDataFile
-            File.WriteAllLines(MatchDataFile, modelsData);
+            File.WriteAllLines(MatchDataFile.GetFilePath(), modelsData);
+
+            //save match entries
+            foreach (MatchRegistryModel entry in match.Entries)
+            {
+                entry.SaveEntryToMatchRegistryFile(MatchRegistryDataFile);
+            }
+            
+            // Save matches again -- overwrite MatchModel-Entries
+            modelsData = new List<string>();
+            foreach (MatchModel m in matches)
+            {
+                // verify Winner for Round 1 matches
+                string winner = string.Empty;
+                if (m.Winner != null)
+                {
+                    winner = m.Winner.Id.ToString();
+                }
+                modelsData.Add($"{m.Id},{ConvertMatchEntriesListToString(match.Entries)},{winner},{m.MatchRound}");
+            }
+            // write data to MatchDataFile
+            File.WriteAllLines(MatchDataFile.GetFilePath(), modelsData);
         }
+
+
+        // TODO - Resolve ISSUE ChickenFirst-EggFirst problem
+        // MatchModel (save matches) needs to be executed before MatchModel-Entries (save match entries)
+        // To debug "Sequence contains no elements" ERROR
+        /* create method to save entry at the same time as match is created
+         * call method from SaveMatchToMatchesFile method
+         * loop through each entry in match.Entries
+         * save entry
+         * return saved entry to ConvertMatchEntriesListToString method
+         */
+        //public static List<MatchRegistryModel> SaveMatchesInSequence(List<MatchRegistryModel> matchEntries)
+        //{
+        //    foreach (MatchRegistryModel entry in matchEntries)
+        //    {
+        //        entry.SaveEntryToMatchRegistryFile(GlobalConfig.MatchRegistryDataFile);
+        //    }
+        //    return matchEntries;
+        //}
+
 
         /// <summary>
         /// SaveRoundsToTournamentsFile Helper Method-
@@ -415,7 +478,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// </summary>
         /// <param name="entry">MatchRegistryModel list from MatchModel</param>
         /// <param name="MatchRegistryDataFile">MatchRegistryModels.csv</param>
-        public static void SaveEntryToTournamentsFile(this MatchRegistryModel entry, string MatchRegistryDataFile) 
+        public static void SaveEntryToMatchRegistryFile(this MatchRegistryModel entry, string MatchRegistryDataFile) 
         {
             List<MatchRegistryModel> matchEntries = GlobalConfig.MatchRegistryDataFile.
                                                         GetFilePath().ReadFileToList().
@@ -439,10 +502,15 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                 {
                     parentMatch = mE.ParentMatch.Id.ToString();
                 }
-                modelsData.Add($"{mE.Id}, {mE.CompetingTeam.Id}, {mE.Score}, {parentMatch}");
+                string teamCompeting = string.Empty;
+                if (mE.CompetingTeam != null)
+                {
+                    teamCompeting = mE.CompetingTeam.Id.ToString();
+                }
+                modelsData.Add($"{mE.Id},{teamCompeting},{mE.Score},{parentMatch}");
             }
             // write all data to MatchRegistryDataFile
-            File.WriteAllLines(MatchRegistryDataFile, modelsData);
+            File.WriteAllLines(MatchRegistryDataFile.GetFilePath(), modelsData);
         }
 
 
@@ -466,7 +534,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
                                         GetFilePath().ReadFileToList().LoadDataToMatchModel();
 
             // filter by matchId in textData for MatchRegistryModel
-            MatchModel match = matches.Where(x => x.Id == matchId).First();
+            MatchModel match = matches.Where(x => x.Id == matchId).FirstOrDefault();     //"Sequence contains no elements"-- InvalidOperation Exception
             return match;
         }
 
@@ -535,7 +603,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             {
                 foreach (MatchModel match in round)
                 {
-                    output += $"{match.Id}^";
+                    output += $"{match.Id}^";       // match was null - NullReferenceException
                 }
                 // remove excess '^' after last match id 
                 output = output.Substring(0, output.Length - 1);
@@ -550,7 +618,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
         /// Helper method to delimit MatchRegistry ids with '|'
         /// </summary>
         /// <param name="matchEntries">list of Entries in MatchModel</param>
-        /// <returns>Entries ids list delimited with '|'</returns>
+        /// <returns>Entries ids string delimited with '|'</returns>
         private static string ConvertMatchEntriesListToString(List<MatchRegistryModel> matchEntries)
         {
             if (matchEntries.Count == 0)
@@ -604,7 +672,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             string output = string.Empty;
             foreach (var team in teams)
             {
-                output += $"{ team.Id }|";
+                output += $"{team.Id}|";
             }
             output = output.Substring(0, output.Length-1);
             return output;
@@ -622,7 +690,7 @@ namespace TrackerLibrary.DataAccess.TextDataProcessors
             string output = string.Empty;
             foreach (PrizeModel prize in prizes) 
             {
-                output += $"{ prize.Id }|";
+                output += $"{prize.Id}|";
             }
             output = output.Substring(0, output.Length - 1);
             return output;
