@@ -574,7 +574,24 @@ populate data -> store data -> data interaction</li>
 		- [Registering Playing/Played Match entries](/Models/MatchRegistryModel.cs) 
 	- Nevertheless, keep up - slowly but steadily.
 
-
+### Debugging Code
+- Most likely errors, NullReferenceException
+- Start with Data storage format
+- Retrace to 'Save' and 'Load' methods
+- Dive into 'Helper-Save' or 'Helper-Load' methods, if any
+- Check that the proper methods are called in the right places
+	- For ex. Text file storage
+	- Calling the right files inside the corresponding 'Save/Load' methods alone is not enough
+	- Make sure to supply the filepath as well 
+	```csharp
+	public static void SaveEntryToTournamentsFile(this MatchRegistryModel entry, string MatchRegistryDataFile)
+	{
+		//code
+		.
+		.
+		File.WriteAllLines(MatchRegistryDataFile.GetFilePath(), modelsData);
+	}
+	```
 
 
 
